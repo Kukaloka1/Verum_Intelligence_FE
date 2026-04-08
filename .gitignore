@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Build / coverage
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Keep examples
+!.env.example
+!.env.local.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cache / temp
+.cache/
+.tmp/
+temp/
+tmp/
+
+# Testing / reports
+playwright-report/
+test-results/
+
+# Storybook
+storybook-static/
