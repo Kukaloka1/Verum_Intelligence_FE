@@ -103,7 +103,7 @@ export function HeroSection() {
           </span>
           <span className="h-0.5 w-1 rounded-full bg-white/10" aria-hidden="true" />
           <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-accent">
-            Foundation-first
+            Jakarta, Indonesia
           </span>
         </div>
       </div>
