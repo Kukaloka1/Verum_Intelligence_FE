@@ -26,6 +26,10 @@ const config: Config = {
       },
       boxShadow: {
         soft: "var(--shadow)"
+      },
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', "system-ui", "-apple-system", "sans-serif"],
+        mono: ['"Geist Mono"', "ui-monospace", "monospace"],
       }
     }
   },
