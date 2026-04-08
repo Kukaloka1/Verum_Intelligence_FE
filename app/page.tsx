@@ -4,6 +4,7 @@ import { LandingAudienceSection } from "@/components/layout/LandingAudienceSecti
 import { LandingModulesSection } from "@/components/layout/LandingModulesSection";
 import { LandingWhySection } from "@/components/layout/LandingWhySection";
 import { LandingJurisdictionsSection } from "@/components/layout/LandingJurisdictionsSection";
+import { LandingTransitionSection } from "@/components/layout/LandingTransitionSection";
 import { LandingCTABanner } from "@/components/layout/LandingCTABanner";
 import { MarketingFooter } from "@/components/layout/MarketingFooter";
 
@@ -16,6 +17,7 @@ export default function HomePage() {
       <LandingModulesSection />
       <LandingWhySection />
       <LandingJurisdictionsSection />
+      <LandingTransitionSection />
       <LandingCTABanner />
       <MarketingFooter />
     </main>
