@@ -1,7 +1,25 @@
-export function QueryLimitations() {
+import { cn } from "@/lib/utils/cn";
+
+interface QueryLimitationsProps {
+  limitations: string;
+  tone?: "warning" | "critical";
+}
+
+export function QueryLimitations({ limitations, tone = "warning" }: QueryLimitationsProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/60">
-      This demo answer is source-backed in structure but currently uses placeholder data.
-    </div>
+    <section
+      className={cn(
+        "rounded-2xl border p-4 text-sm",
+        tone === "critical"
+          ? "border-accent/35 bg-accent/10 text-foreground"
+          : "border-border bg-background text-foreground/90"
+      )}
+    >
+      <div className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+        Limitations
+      </div>
+      <p className="leading-relaxed">{limitations}</p>
+    </section>
   );
 }
+
