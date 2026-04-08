@@ -50,3 +50,13 @@ test-results/
 
 # Storybook
 storybook-static/
+
+# Development / internal project docs
+AGENTS.md
+CLAUDE.md
+docs/AGENTS.md
+docs/MODULE_1_AI_QUERY.md
+docs/MODULE_2_COMPLIANCE_DASHBOARD.md
+docs/MODULE_3_FRAMEWORK_COMPARISON.md
+docs/MODULE_4_MARKET_ENTRY_TOOLKIT.md
+docs/MODULE_5_USER_AUTH_AND_DASHBOARD.md
