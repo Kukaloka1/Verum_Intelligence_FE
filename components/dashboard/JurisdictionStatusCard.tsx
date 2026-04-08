@@ -7,10 +7,17 @@ export function JurisdictionStatusCard({
   jurisdiction: string;
   status: string;
 }) {
+  const statusTone =
+    status === "high attention"
+      ? "text-accent"
+      : status === "stable"
+        ? "text-muted"
+        : "text-foreground";
+
   return (
     <Card>
-      <div className="text-sm text-white/50">{jurisdiction}</div>
-      <div className="mt-2 text-xl font-medium">{status}</div>
+      <div className="text-sm uppercase tracking-wide text-muted">{jurisdiction}</div>
+      <div className={`mt-2 text-xl font-medium capitalize ${statusTone}`}>{status}</div>
     </Card>
   );
 }

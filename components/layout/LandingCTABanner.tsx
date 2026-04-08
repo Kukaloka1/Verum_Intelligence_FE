@@ -41,7 +41,7 @@ export function LandingCTABanner() {
           {/* Único Botón: Sign In (The "Closing" Action) */}
           <div className="flex flex-col items-center gap-6">
             <Link
-              href="/sign-in" // O la ruta que maneje tu Auth
+              href={ROUTES.login}
               className="group relative flex items-center justify-center overflow-hidden rounded-full bg-accent px-10 py-4 text-sm font-semibold text-white shadow-[0_0_0_1px_rgba(var(--accent-rgb),1),0_10px_30px_-10px_rgba(var(--accent-rgb),0.5),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-500 hover:scale-[1.02] hover:bg-accentHover active:scale-[0.98]"
             >
               {/* Brillo dinámico interno en el botón */}

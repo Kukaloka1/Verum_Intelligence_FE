@@ -3,7 +3,7 @@ import { DevelopmentFeedItem } from "./DevelopmentFeedItem";
 
 export function RecentDevelopmentsFeed() {
   return (
-    <div>
+    <div className="text-foreground">
       <SectionHeader title="Recent Developments" />
       <div className="space-y-4">
         <DevelopmentFeedItem />

@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/shared/Input";
+import { getPostAuthRedirect } from "@/lib/auth/redirect";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
 
@@ -50,6 +52,9 @@ export function AuthEntryPanel({
   onLoginSubmit,
   onSignupSubmit
 }: AuthEntryPanelProps) {
+  const router = useRouter();
+  const [requestedRedirect, setRequestedRedirect] = useState<string | null>(null);
+
   const [mode, setMode] = useState<AuthMode>(initialMode);
   const [pendingAction, setPendingAction] = useState<"google" | "credentials" | null>(null);
 
@@ -60,12 +65,22 @@ export function AuthEntryPanel({
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setRequestedRedirect(params.get("next") ?? params.get("redirect_to"));
+  }, []);
+
   const isLogin = mode === "login";
+  const postAuthDestination = getPostAuthRedirect(requestedRedirect);
 
   const handleGoogleSignIn = async () => {
     setPendingAction("google");
     try {
-      await runMaybeAsync(onGoogleSignIn);
+      if (onGoogleSignIn) {
+        await runMaybeAsync(onGoogleSignIn);
+      } else {
+        router.replace(postAuthDestination);
+      }
     } finally {
       setPendingAction(null);
     }
@@ -76,17 +91,31 @@ export function AuthEntryPanel({
     setPendingAction("credentials");
     try {
       if (isLogin) {
-        await onLoginSubmit?.({
+        const payload = {
           email: loginEmail.trim(),
           password: loginPassword
-        });
+        };
+
+        if (onLoginSubmit) {
+          await onLoginSubmit(payload);
+        } else {
+          router.replace(postAuthDestination);
+        }
+
         return;
       }
-      await onSignupSubmit?.({
+
+      const payload = {
         fullName: signupFullName.trim(),
         email: signupEmail.trim(),
         password: signupPassword
-      });
+      };
+
+      if (onSignupSubmit) {
+        await onSignupSubmit(payload);
+      } else {
+        router.replace(postAuthDestination);
+      }
     } finally {
       setPendingAction(null);
     }

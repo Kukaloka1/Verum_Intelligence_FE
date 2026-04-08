@@ -6,7 +6,7 @@ import { RecentDevelopmentsFeed } from "./RecentDevelopmentsFeed";
 
 export function DashboardPageShell() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 text-foreground md:space-y-6">
       <PageHeader
         title="Compliance Dashboard"
         description="Source-backed regulatory monitoring across DIFC, ADGM, QFC, and KSA."

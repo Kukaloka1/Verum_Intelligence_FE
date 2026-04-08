@@ -7,5 +7,7 @@ export const ROUTES = {
   workspace: "/workspace",
   profile: "/profile",
   login: "/auth/login",
-  signup: "/auth/signup"
+  signup: "/auth/signup",
+  callback: "/auth/callback",
+  postAuthHome: "/dashboard"
 } as const;
