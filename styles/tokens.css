@@ -1,11 +1,25 @@
 :root {
-  --background: #0b1020;
-  --panel: #12182b;
-  --panel-2: #18203a;
-  --foreground: #f5f7fb;
-  --muted: #9aa4bf;
-  --border: rgba(255,255,255,0.08);
-  --accent: #d9e3ff;
+  /* Backgrounds */
+  --background:    #FAF7F0;          /* warm cream white */
+  --panel:         #B6AE9F;          /* warm taupe card */
+  --panel-2:       #A8A092;          /* darker taupe on hover */
+  --surface-dark:  #0A0806;          /* deep dark — hero, CTA banner, footer */
+  --surface-dark-rgb: 10, 8, 6;     /* RGB channels for rgba() usage */
+
+  /* Text */
+  --foreground:    #000000;          /* pure black */
+  --muted:         #2E2C2A;          /* dark warm gray */
+
+  /* Accent */
+  --accent:        #8A0000;          /* dark red — primary CTA */
+  --accent-hover:  #A30000;          /* dark red hover */
+  --accent-rgb:    138, 0, 0;        /* RGB channels for rgba() usage */
+  --accent-warm:   #B17457;          /* terracotta */
+
+  /* Borders */
+  --border: rgba(74, 73, 71, 0.14);
+
+  /* Misc */
   --radius: 18px;
-  --shadow: 0 10px 30px rgba(0,0,0,0.18);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }

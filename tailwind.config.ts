@@ -11,13 +11,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        panel: "var(--panel)",
-        panel2: "var(--panel-2)",
-        foreground: "var(--foreground)",
-        muted: "var(--muted)",
-        accent: "var(--accent)",
-        border: "var(--border)"
+        background:  "var(--background)",
+        panel:       "var(--panel)",
+        panel2:      "var(--panel-2)",
+        foreground:  "var(--foreground)",
+        muted:       "var(--muted)",
+        accent:      "rgba(var(--accent-rgb), <alpha-value>)",
+        accentHover: "var(--accent-hover)",
+        surfaceDark: "rgba(var(--surface-dark-rgb), <alpha-value>)",
+        border:      "var(--border)",
       },
       borderRadius: {
         xl2: "var(--radius)"
