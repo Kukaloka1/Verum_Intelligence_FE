@@ -52,7 +52,12 @@ test-results/
 storybook-static/
 
 # Development / internal project docs
+AGENT.md
 AGENTS.md
+docs/ARCHITECTURE.md
+docs/DEVELOPMENT_LOG.md
+docs/HANDOFF.md
+docs/REPOSITORY_STRUCTURE.md
 CLAUDE.md
 docs/AGENTS.md
 docs/MODULE_1_AI_QUERY.md
