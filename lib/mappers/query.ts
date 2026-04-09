@@ -104,6 +104,108 @@ function parseCitations(value: unknown): QueryCitation[] {
   return value.map((item, index) => parseCitation(item, index));
 }
 
+function asOptionalString(value: unknown): string | undefined {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
+function asOptionalNullableString(value: unknown): string | null | undefined {
+  if (value === null) {
+    return null;
+  }
+
+  return asOptionalString(value);
+}
+
+function asOptionalNonNegativeInteger(value: unknown): number | undefined {
+  if (typeof value !== "number" || !Number.isInteger(value) || value < 0) {
+    return undefined;
+  }
+
+  return value;
+}
+
+function coerceAnswerForPartialFallback(value: unknown): QueryAnswer {
+  const summaryFallback = "A partial grounded response was returned by the backend.";
+  const bodyFallback: QueryAnswerSection[] = [
+    {
+      sectionTitle: "Execution status",
+      content:
+        "The backend returned a partial result, but part of the payload did not match the strict frontend parser."
+    }
+  ];
+
+  if (!isRecord(value)) {
+    return {
+      summary: summaryFallback,
+      body: bodyFallback,
+      limitations:
+        "Rendering uses a safe fallback for partial responses when strict payload validation fails."
+    };
+  }
+
+  const summary = asOptionalString(value.summary) ?? summaryFallback;
+  const limitations = asOptionalString(value.limitations);
+  const body = Array.isArray(value.body)
+    ? value.body
+        .map((item) => {
+          if (!isRecord(item)) {
+            return null;
+          }
+
+          const sectionTitle = asOptionalString(item.sectionTitle);
+          const content = asOptionalString(item.content);
+          if (!sectionTitle || !content) {
+            return null;
+          }
+
+          return {
+            sectionTitle,
+            content
+          } satisfies QueryAnswerSection;
+        })
+        .filter((section): section is QueryAnswerSection => section !== null)
+    : [];
+
+  return {
+    summary,
+    body: body.length > 0 ? body : bodyFallback,
+    limitations
+  };
+}
+
+function coerceCitationsForPartialFallback(value: unknown): QueryCitation[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((item) => {
+      if (!isRecord(item)) {
+        return null;
+      }
+
+      const sourceName = asOptionalString(item.sourceName);
+      const documentTitle = asOptionalString(item.documentTitle);
+      if (!sourceName || !documentTitle) {
+        return null;
+      }
+
+      return {
+        sourceName,
+        documentTitle,
+        publishedAt: asOptionalNullableString(item.publishedAt) ?? null,
+        sourceType: asOptionalNullableString(item.sourceType) ?? null,
+        url: asOptionalNullableString(item.url) ?? null
+      } satisfies QueryCitation;
+    })
+    .filter((citation): citation is QueryCitation => citation !== null);
+}
+
 function isQueryResultStatus(value: string): value is QueryResultStatus {
   return (QUERY_RESULT_STATUSES as readonly string[]).includes(value);
 }
@@ -211,3 +313,25 @@ export function mapQueryResponse(value: unknown): QueryResponse {
   throw new Error(`Unsupported query status: ${status}`);
 }
 
+export function coercePartialSuccessResponse(value: unknown): QuerySuccessResponse | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const resultStatus = asOptionalString(value.resultStatus);
+  if (resultStatus !== "partial") {
+    return null;
+  }
+
+  const citations = coerceCitationsForPartialFallback(value.citations);
+  const parsedSourcesUsed = asOptionalNonNegativeInteger(value.sourcesUsed);
+
+  return {
+    resultStatus: "partial",
+    queryId: asOptionalString(value.queryId) ?? `partial-fallback-${Date.now()}`,
+    jurisdiction: asOptionalNullableString(value.jurisdiction) ?? null,
+    answer: coerceAnswerForPartialFallback(value.answer),
+    citations,
+    sourcesUsed: parsedSourcesUsed ?? citations.length
+  };
+}

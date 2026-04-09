@@ -16,8 +16,24 @@ const DEFAULT_QUERY =
   "What are the licensing implications for a fintech firm in DIFC?";
 const DEFAULT_JURISDICTION = "DIFC";
 const MAX_HISTORY_ENTRIES = 40;
-const REQUEST_TIMEOUT_MS = 12000;
+const DEFAULT_REQUEST_TIMEOUT_MS = 22000;
 const DEBUG_QUERY_FLOW = process.env.NODE_ENV !== "production";
+
+function resolveRequestTimeoutMs(): number {
+  const rawValue = process.env.NEXT_PUBLIC_QUERY_REQUEST_TIMEOUT_MS;
+  if (!rawValue) {
+    return DEFAULT_REQUEST_TIMEOUT_MS;
+  }
+
+  const parsed = Number(rawValue);
+  if (!Number.isInteger(parsed) || parsed < 2000) {
+    return DEFAULT_REQUEST_TIMEOUT_MS;
+  }
+
+  return parsed;
+}
+
+const REQUEST_TIMEOUT_MS = resolveRequestTimeoutMs();
 
 interface UseQueryFlowOptions {
   initialQuery?: string;
@@ -252,7 +268,8 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
       queryLength: query.length,
       jurisdiction,
       hasUserId: Boolean(userId),
-      saveQuery: requestBody.saveQuery
+      saveQuery: requestBody.saveQuery,
+      timeoutMs: REQUEST_TIMEOUT_MS
     });
 
     try {

@@ -20,7 +20,8 @@ export function QueryActions({
     <div className="space-y-4 border-t border-border pt-4">
       <SaveQueryButton
         checked={saveQuery}
-        disabled={!canSaveQuery || isLoading}
+        canSaveQuery={canSaveQuery}
+        isLoading={isLoading}
         onCheckedChange={onSaveQueryChange}
       />
 

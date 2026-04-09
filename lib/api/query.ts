@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api/client";
-import { mapQueryResponse } from "@/lib/mappers/query";
+import { coercePartialSuccessResponse, mapQueryResponse } from "@/lib/mappers/query";
 import type { QueryRequestBody, QueryRequestResult } from "@/types/query";
 
 const QUERY_ENDPOINT_PATH = "/v1/query";
@@ -35,8 +35,20 @@ export async function postQueryRequest(
     throw new Error(`Query API returned invalid JSON (HTTP ${response.status}).`);
   }
 
-  return {
-    httpStatus: response.status,
-    payload: mapQueryResponse(payload)
-  };
+  try {
+    return {
+      httpStatus: response.status,
+      payload: mapQueryResponse(payload)
+    };
+  } catch (error) {
+    const partialFallback = coercePartialSuccessResponse(payload);
+    if (response.status === 200 && partialFallback) {
+      return {
+        httpStatus: response.status,
+        payload: partialFallback
+      };
+    }
+
+    throw error;
+  }
 }
