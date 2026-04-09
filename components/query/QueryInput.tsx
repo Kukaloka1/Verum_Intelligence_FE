@@ -35,7 +35,7 @@ export function QueryInput({
 }: QueryInputProps) {
   return (
     <form
-      className="flex flex-col gap-8 p-5 md:gap-10 md:p-6"
+      className="flex flex-col gap-8 p-4 md:gap-10 md:p-5 xl:p-6"
       onSubmit={(event) => {
         event.preventDefault();
         void onSubmit();
@@ -45,7 +45,7 @@ export function QueryInput({
         <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted">
           Query Input
         </h2>
-        <p className="max-w-[62ch] text-sm leading-relaxed text-foreground/80">
+        <p className="max-w-none text-sm leading-relaxed text-foreground/80">
           Submit a source-backed legal or regulatory question. The backend answer is constrained to
           grounded corpus evidence.
         </p>
@@ -69,12 +69,12 @@ export function QueryInput({
 
         <Textarea
           id="query-input"
-          rows={9}
+          rows={10}
           value={query}
           disabled={isLoading}
           maxLength={4000}
           placeholder={queryPlaceholder}
-          className="!min-h-[250px] !border-border/80 !bg-background !px-5 !py-4 !text-[15px] !leading-8 !text-foreground placeholder:!text-muted/70 resize-none shadow-none"
+          className="!min-h-[280px] md:!min-h-[320px] xl:!min-h-[360px] !w-full !border-border/80 !bg-background !px-5 md:!px-6 xl:!px-7 !py-4 md:!py-5 !text-[15px] md:!text-base !leading-8 !text-foreground placeholder:!text-muted/70 resize-none shadow-none"
           onChange={(event) => onQueryChange(event.target.value)}
         />
 

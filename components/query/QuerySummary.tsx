@@ -13,7 +13,7 @@ const STATUS_LABELS: Record<QuerySummaryProps["status"], string> = {
 export function QuerySummary({ summary, status }: QuerySummaryProps) {
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted/80">
           Executive Summary
         </div>
@@ -28,7 +28,7 @@ export function QuerySummary({ summary, status }: QuerySummaryProps) {
         </span>
       </div>
 
-      <p className="max-w-[65ch] text-base font-medium leading-8 text-foreground/90 selection:bg-primary/10">
+      <p className="max-w-none break-words text-base font-medium leading-8 text-foreground/90 selection:bg-primary/10 md:max-w-[65ch]">
         {summary}
       </p>
     </section>

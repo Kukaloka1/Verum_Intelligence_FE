@@ -81,7 +81,7 @@ export function QueryHistoryPanel({ entries, onUseEntry, onDeleteEntry }: QueryH
                 <div className="text-xs text-muted">{formatTimestamp(entry.createdAt)}</div>
               </div>
 
-              <p className="mt-2 text-sm leading-relaxed text-foreground/95">{entry.query}</p>
+              <p className="mt-2 break-words text-sm leading-relaxed text-foreground/95">{entry.query}</p>
 
               <div className="mt-2 grid gap-1.5 text-xs text-muted sm:grid-cols-2">
                 <span>Jurisdiction: {entry.jurisdiction ?? "All"}</span>

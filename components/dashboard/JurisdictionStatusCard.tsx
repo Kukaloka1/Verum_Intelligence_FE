@@ -16,8 +16,8 @@ export function JurisdictionStatusCard({
 
   return (
     <Card>
-      <div className="text-sm uppercase tracking-wide text-muted">{jurisdiction}</div>
-      <div className={`mt-2 text-xl font-medium capitalize ${statusTone}`}>{status}</div>
+      <div className="break-words text-sm uppercase tracking-wide text-muted">{jurisdiction}</div>
+      <div className={`mt-2 break-words text-xl font-medium capitalize ${statusTone}`}>{status}</div>
     </Card>
   );
 }

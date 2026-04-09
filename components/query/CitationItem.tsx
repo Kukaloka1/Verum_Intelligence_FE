@@ -26,50 +26,48 @@ function formatPublishedAt(value: string | null) {
   return date.toLocaleDateString();
 }
 
-function getDisplayUrl(rawUrl: string) {
-  try {
-    const parsed = new URL(rawUrl);
-    return `${parsed.hostname}${parsed.pathname}`;
-  } catch {
-    return rawUrl;
-  }
-}
-
 export function CitationItem({ citation, index }: CitationItemProps) {
   return (
-    <article className="group relative flex flex-col gap-3 border-b border-border/50 pb-8 text-sm text-foreground/90 last:border-0 last:pb-0">
+    <article className="group relative flex min-w-0 flex-col gap-3 border-b border-border/50 pb-8 text-sm text-foreground/90 last:border-0 last:pb-0">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 flex-1 items-center gap-3">
           <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted/70">
             Citation {index + 1}
           </span>
 
           <div className="h-1 w-1 rounded-full bg-border" />
 
-          <span className="text-xs text-muted">{citationSourceLabel(citation)}</span>
+          <span className="min-w-0 break-words text-xs text-muted">
+            {citationSourceLabel(citation)}
+          </span>
         </div>
 
-        <span className="text-xs text-muted">{formatPublishedAt(citation.publishedAt)}</span>
+        <span className="shrink-0 text-xs text-muted">{formatPublishedAt(citation.publishedAt)}</span>
       </div>
 
-      <div className="space-y-2">
+      <div className="min-w-0 space-y-2">
         {citation.url ? (
           <a
             href={citation.url}
             target="_blank"
             rel="noreferrer"
-            className="block text-base font-semibold leading-snug text-foreground transition-colors hover:text-accent hover:underline"
+            className="block min-w-0 break-words text-base font-semibold leading-snug text-foreground transition-colors hover:text-accent hover:underline"
           >
             {citation.documentTitle}
           </a>
         ) : (
-          <p className="text-base font-semibold leading-snug text-foreground">
+          <p className="min-w-0 break-words text-base font-semibold leading-snug text-foreground">
             {citation.documentTitle}
           </p>
         )}
 
         {citation.url ? (
-          <p className="text-[11px] text-muted/70">{getDisplayUrl(citation.url)}</p>
+          <p
+            className="min-w-0 break-all font-mono text-[11px] text-muted/70 [overflow-wrap:anywhere]"
+            title={citation.url}
+          >
+            {citation.url}
+          </p>
         ) : (
           <p className="text-[11px] text-muted/70">Reference URL unavailable.</p>
         )}

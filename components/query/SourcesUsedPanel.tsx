@@ -21,23 +21,23 @@ function sourceSupportLabel(sourcesUsed: number) {
 
 export function SourcesUsedPanel({ sourcesUsed, jurisdiction }: SourcesUsedPanelProps) {
   return (
-    <section className="flex h-full flex-col">
-      <div className="mb-8 space-y-1.5">
+    <section className="flex h-full min-w-0 flex-col gap-8 lg:gap-10">
+      <div className="space-y-1.5">
         <div className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
           Traceability
         </div>
-        <p className="max-w-[30ch] text-xs leading-relaxed text-muted/70">
+        <p className="max-w-[30ch] text-xs leading-relaxed text-muted/70 lg:max-w-[34ch]">
           Source density returned by the backend retrieval layer for this result.
         </p>
       </div>
 
-      <div className="flex flex-col gap-8">
-        <div className="flex items-baseline gap-4">
-          <span className="text-7xl font-bold leading-none tracking-tighter tabular-nums text-foreground">
+      <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end lg:gap-10">
+        <div className="flex min-w-0 items-end gap-4">
+          <span className="shrink-0 text-7xl font-bold leading-none tracking-tighter tabular-nums text-foreground lg:text-[5rem]">
             {sourcesUsed}
           </span>
 
-          <div className="flex flex-col gap-0.5">
+          <div className="min-w-0 flex flex-col gap-0.5 pb-1">
             <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted">
               Sources used
             </span>
@@ -47,8 +47,8 @@ export function SourcesUsedPanel({ sourcesUsed, jurisdiction }: SourcesUsedPanel
           </div>
         </div>
 
-        <div className="flex flex-col gap-5 border-t border-border/60 pt-7">
-          <div className="flex flex-col gap-1.5">
+        <div className="min-w-0 flex flex-col gap-5">
+          <div className="flex min-w-0 flex-col gap-1.5">
             <p
               className={`text-xs font-semibold uppercase tracking-[0.12em] ${
                 sourcesUsed >= 5 ? "text-emerald-600/90" : "text-amber-600/90"
@@ -57,9 +57,11 @@ export function SourcesUsedPanel({ sourcesUsed, jurisdiction }: SourcesUsedPanel
               {sourceSupportLabel(sourcesUsed)}
             </p>
 
-            <div className="flex items-center gap-2 text-xs text-muted">
-              <span>Jurisdiction:</span>
-              <span className="font-medium text-foreground/70">{jurisdiction ?? "All"}</span>
+            <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
+              <span className="shrink-0">Jurisdiction:</span>
+              <span className="min-w-0 break-words font-medium text-foreground/70">
+                {jurisdiction ?? "All"}
+              </span>
             </div>
           </div>
 

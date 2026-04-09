@@ -7,22 +7,22 @@ interface CitationListProps {
 
 export function CitationList({ citations }: CitationListProps) {
   return (
-    <section className="flex flex-col">
-      <div className="mb-8 space-y-1.5">
+    <section className="flex min-w-0 flex-col gap-1 lg:gap-2">
+      <div className="mb-8 space-y-1.5 lg:mb-10">
         <div className="text-sm font-semibold uppercase tracking-[0.14em] text-muted">
           Citations
         </div>
-        <p className="max-w-[45ch] text-xs leading-relaxed text-muted/70">
+        <p className="max-w-[45ch] text-xs leading-relaxed text-muted/70 lg:max-w-[56ch]">
           Source-backed references returned by the backend retrieval layer.
         </p>
       </div>
 
       {citations.length === 0 ? (
-        <div className="flex items-center justify-center rounded-xl border border-dashed border-border/60 bg-muted/5 px-4 py-12">
+        <div className="flex items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/5 px-5 py-14 lg:px-6 lg:py-16">
           <p className="text-sm text-muted">No citations were returned for this result.</p>
         </div>
       ) : (
-        <div className="flex flex-col">
+        <div className="flex min-w-0 flex-col">
           {citations.map((citation, index) => (
             <CitationItem
               key={`${citation.sourceName}-${citation.documentTitle}-${index}`}
