@@ -5,40 +5,28 @@ import { ROUTES } from "@/lib/constants/routes";
 export function HeroSection() {
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden bg-surfaceDark">
-      {/* 1. Fondo base con escala de grises sutil para no competir con los colores de marca */}
-      <div className="absolute inset-0 z-0 opacity-80 mix-blend-luminosity">
+      {/* 1. Hero background image — GPU-composited */}
+      <div className="absolute inset-0 z-0">
         <Image
           src="/images/jakarta.webp"
           alt="Jakarta skyline"
           fill
           priority
-          className="object-cover object-center"
+          className="object-cover object-center opacity-60"
           sizes="100vw"
         />
       </div>
 
-      {/* 2. Textura de ruido premium (Patrón moderno 2026) */}
-      <div 
-        className="absolute inset-0 z-10 opacity-[0.03] mix-blend-overlay"
-        style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }}
-      />
-
-      {/* 3. Gradientes cinemáticos multicapa para profundidad 3D */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-surfaceDark via-surfaceDark/80 to-transparent" />
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-surfaceDark via-transparent to-surfaceDark opacity-80" />
-      
-      {/* Resplandor radial sutil detrás del texto para enfoque visual */}
-      <div className="absolute left-1/2 top-1/2 z-10 h-[600px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/5 blur-[120px]" />
+      {/* 2. Single consolidated overlay — one paint layer instead of two */}
+      <div className="absolute inset-0 z-10 bg-[#0A0806]/70" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0A0806] via-transparent to-transparent" />
 
       {/* Content */}
       <div className="relative z-20 mx-auto w-full max-w-7xl px-6 pb-24 pt-32">
         
         {/* Eyebrow - Estilo Badge de hardware de Apple */}
-        <div className="mb-10 inline-flex items-center gap-3 rounded-full border border-white/[0.08] bg-white/[0.02] px-4 py-2 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] backdrop-blur-md">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
-          </span>
+        <div className="mb-10 inline-flex items-center gap-3 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
           <span className="text-[11px] font-medium tracking-[0.06em] text-white/70">
             AI-powered GCC regulatory intelligence
           </span>
@@ -50,7 +38,7 @@ export function HeroSection() {
           <br />
           regulatory complexity
           <br />
-          <span className="bg-gradient-to-r from-white/40 to-white/20 bg-clip-text text-transparent">
+          <span className="text-white/30">
             with AI precision.
           </span>
         </h1>
@@ -66,17 +54,17 @@ export function HeroSection() {
         <div className="mt-12 flex flex-wrap items-center gap-4">
           <Link
             href={ROUTES.query}
-            className="group relative inline-flex items-center gap-2.5 rounded-xl border border-accent/50 bg-accent px-7 py-3.5 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_2px_12px_rgba(var(--accent-rgb),0.25)] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-accentHover hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25),0_4px_24px_rgba(var(--accent-rgb),0.4)]"
+            className="group relative inline-flex items-center gap-2.5 rounded-xl border border-accent/50 bg-accent px-7 py-3.5 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_2px_12px_rgba(var(--accent-rgb),0.25)] transition-[background-color,box-shadow] duration-300 hover:bg-accentHover hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25),0_4px_24px_rgba(var(--accent-rgb),0.4)]"
           >
             Explore AI Query
-            <span className="transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1">
+            <span className="transition-transform duration-200 group-hover:translate-x-1">
               →
             </span>
           </Link>
           
           <Link
             href={ROUTES.dashboard}
-            className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.02] px-7 py-3.5 text-sm font-medium text-white/70 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.02)] backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-white/[0.06] hover:text-white"
+            className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.02] px-7 py-3.5 text-sm font-medium text-white/70 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.02)] transition-[background-color,color] duration-300 hover:bg-white/[0.06] hover:text-white"
           >
             View Dashboard
           </Link>

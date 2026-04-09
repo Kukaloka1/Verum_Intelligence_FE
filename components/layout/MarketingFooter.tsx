@@ -119,7 +119,7 @@ export function MarketingFooter() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-[13px] font-medium text-background transition-all hover:translate-x-1 hover:text-accent"
+                        className="text-[13px] font-medium text-background transition-[transform,color] duration-200 hover:translate-x-1 hover:text-accent"
                       >
                         {link.label}
                       </Link>

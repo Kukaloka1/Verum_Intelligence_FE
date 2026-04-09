@@ -24,7 +24,7 @@ const AUDIENCES = [
 
 export function LandingAudienceSection() {
   return (
-    <section id="audience" className="relative mx-auto max-w-7xl px-6 py-32">
+    <section id="audience" className="landing-section-lazy relative mx-auto max-w-7xl px-6 py-32">
       
       {/* Luz cenital de separación (Efecto Vercel) */}
       <div className="pointer-events-none absolute left-1/2 top-0 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-foreground/15 to-transparent" />
@@ -52,17 +52,17 @@ export function LandingAudienceSection() {
       </div>
 
       {/* Audience cards - Bento Box Grid Real */}
-      <div className="grid gap-px overflow-hidden rounded-[2rem] border border-border bg-border shadow-2xl shadow-black/10 md:grid-cols-3">
+      <div className="grid gap-px overflow-hidden rounded-[2rem] border border-border bg-border md:grid-cols-3">
         {AUDIENCES.map((a) => (
           <div
             key={a.index}
-            className="group relative flex flex-col bg-panel p-8 md:p-10 transition-colors duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-panel2/50"
+            className="group relative flex flex-col bg-panel p-8 md:p-10 transition-[background-color] duration-300 hover:bg-panel2"
           >
             {/* Sombra interior superior para efecto de cristal opaco */}
             <div className="pointer-events-none absolute inset-0 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.02)]" />
 
             {/* Número Marca de Agua (Parallax sutil) */}
-            <div className="absolute -right-4 -top-8 select-none text-[8rem] font-bold leading-none tracking-tighter text-foreground/[0.03] transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-x-2 group-hover:translate-y-2">
+            <div className="absolute -right-4 -top-8 select-none text-[8rem] font-bold leading-none tracking-tighter text-foreground/[0.03] transition-transform duration-300 group-hover:-translate-x-2 group-hover:translate-y-2">
               {a.index}
             </div>
 
@@ -90,7 +90,7 @@ export function LandingAudienceSection() {
                 {a.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-md border border-border/50 bg-foreground/[0.015] px-2.5 py-1.5 text-[11px] font-medium tracking-wide text-muted/80 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.02)] transition-colors duration-500 group-hover:border-border group-hover:text-muted"
+                    className="rounded-md border border-border/50 bg-foreground/[0.015] px-2.5 py-1.5 text-[11px] font-medium tracking-wide text-muted/80 transition-[border-color,color] duration-200 group-hover:border-border group-hover:text-muted"
                   >
                     {tag}
                   </span>

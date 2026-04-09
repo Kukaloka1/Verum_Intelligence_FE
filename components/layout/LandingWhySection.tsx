@@ -28,7 +28,7 @@ const PILLARS = [
 
 export function LandingWhySection() {
   return (
-    <section id="why-verum" className="relative mx-auto max-w-7xl px-6 py-32">
+    <section id="why-verum" className="landing-section-lazy relative mx-auto max-w-7xl px-6 py-32">
       
       {/* Background Decor - Un haz de luz sutil que cruza la sección */}
       <div className="absolute left-0 top-1/2 h-px w-full bg-gradient-to-r from-transparent via-border/40 to-transparent" />
@@ -48,11 +48,11 @@ export function LandingWhySection() {
       </div>
 
       {/* Stats row - Transformado en un "Dashboard de Precisión" */}
-      <div className="relative z-10 mb-24 grid grid-cols-2 gap-px overflow-hidden rounded-[2rem] border border-border bg-border shadow-2xl md:grid-cols-4">
+      <div className="relative z-10 mb-24 grid grid-cols-2 gap-px overflow-hidden rounded-[2rem] border border-border bg-border md:grid-cols-4">
         {STATS.map((s) => (
           <div
             key={s.label}
-            className="group relative flex flex-col justify-end bg-panel px-8 py-10 transition-colors duration-500 hover:bg-panel2/80"
+            className="group relative flex flex-col justify-end bg-panel px-8 py-10 transition-[background-color] duration-300 hover:bg-panel2"
           >
             {/* Glossy overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
@@ -79,7 +79,7 @@ export function LandingWhySection() {
             
             {/* Header del Pilar */}
             <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-panel text-[11px] font-bold text-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] transition-all duration-500 group-hover:border-foreground group-hover:text-foreground">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-panel text-[11px] font-bold text-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] transition-[border-color,color] duration-300 group-hover:border-foreground group-hover:text-foreground">
                 {p.index}
               </div>
               <div className="h-px w-full bg-gradient-to-r from-border to-transparent" />
@@ -95,7 +95,7 @@ export function LandingWhySection() {
             </div>
 
             {/* Acento lateral sutil solo visible en hover para no saturar */}
-            <div className="absolute -left-4 top-0 h-0 w-1 rounded-full bg-accent transition-all duration-500 group-hover:h-full group-hover:opacity-100 opacity-0" />
+            <div className="absolute -left-4 top-0 h-0 w-1 rounded-full bg-accent transition-[height,opacity] duration-300 group-hover:h-full group-hover:opacity-100 opacity-0" />
           </div>
         ))}
       </div>

@@ -4,7 +4,14 @@ import type { QueryRequestBody, QueryRequestResult } from "@/types/query";
 
 const QUERY_ENDPOINT_PATH = "/v1/query";
 
-export async function postQueryRequest(input: QueryRequestBody): Promise<QueryRequestResult> {
+interface PostQueryRequestOptions {
+  signal?: AbortSignal;
+}
+
+export async function postQueryRequest(
+  input: QueryRequestBody,
+  options: PostQueryRequestOptions = {}
+): Promise<QueryRequestResult> {
   const response = await apiFetch(QUERY_ENDPOINT_PATH, {
     method: "POST",
     headers: {
@@ -12,6 +19,7 @@ export async function postQueryRequest(input: QueryRequestBody): Promise<QueryRe
     },
     credentials: "include",
     cache: "no-store",
+    signal: options.signal,
     body: JSON.stringify(input)
   });
 

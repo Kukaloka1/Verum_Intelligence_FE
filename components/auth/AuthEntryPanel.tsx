@@ -124,20 +124,19 @@ export function AuthEntryPanel({
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surfaceDark px-6 py-14 text-background">
       
-      {/* Decoración Atmosférica: Grid Técnico + Glow */}
-      <div 
-        className="absolute inset-0 opacity-[0.03] mix-blend-overlay"
-        style={{ 
-          backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)`,
-          backgroundSize: '48px 48px' 
+      {/* Subtle dot grid — pure CSS, no blend mode, no blur */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.4) 1px, transparent 0)",
+          backgroundSize: "48px 48px",
         }}
       />
-      <div className="pointer-events-none absolute -top-28 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-accent/10 blur-[120px]" />
       
       {/* Línea de horizonte técnica */}
       <div className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-      <section className="relative w-full max-w-[480px] overflow-hidden rounded-[2.5rem] border border-white/[0.08] bg-white/[0.02] p-8 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] backdrop-blur-3xl sm:p-12">
+      <section className="relative w-full max-w-[480px] overflow-hidden rounded-[2.5rem] border border-white/[0.08] bg-white/[0.06] p-8 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] sm:p-12">
         
         {/* Borde de luz superior (Rim Light) */}
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -177,7 +176,7 @@ export function AuthEntryPanel({
           type="button"
           onClick={handleGoogleSignIn}
           disabled={pendingAction !== null}
-          className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-sm font-medium text-background transition-all hover:bg-white/[0.06] hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+          className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-sm font-medium text-background transition-[background-color,border-color] duration-200 hover:bg-white/[0.06] hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <GoogleMark />
           <span className="relative z-10">
@@ -198,7 +197,7 @@ export function AuthEntryPanel({
             type="button"
             onClick={() => setMode("login")}
             className={cn(
-              "rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-all duration-300",
+              "rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-[background-color,color] duration-200",
               isLogin 
                 ? "bg-accent text-white shadow-lg" 
                 : "text-white/30 hover:text-white/60"
@@ -210,7 +209,7 @@ export function AuthEntryPanel({
             type="button"
             onClick={() => setMode("signup")}
             className={cn(
-              "rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-all duration-300",
+              "rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-[background-color,color] duration-200",
               !isLogin 
                 ? "bg-accent text-white shadow-lg" 
                 : "text-white/30 hover:text-white/60"
@@ -263,9 +262,9 @@ export function AuthEntryPanel({
           <button
             type="submit"
             disabled={pendingAction !== null}
-            className="group relative mt-6 flex w-full items-center justify-center overflow-hidden rounded-2xl bg-accent py-4 text-sm font-bold text-white shadow-[0_10px_30px_-10px_rgba(var(--accent-rgb),0.5)] transition-all hover:bg-accentHover hover:scale-[1.01] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            className="group relative mt-6 flex w-full items-center justify-center overflow-hidden rounded-2xl bg-accent py-4 text-sm font-bold text-white shadow-[0_10px_30px_-10px_rgba(var(--accent-rgb),0.5)] transition-[background-color,transform] duration-200 hover:bg-accentHover hover:scale-[1.01] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
+            <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-[100%]" />
             <span className="relative z-10 flex items-center gap-2">
               {pendingAction === "credentials"
                 ? "Initialising..."

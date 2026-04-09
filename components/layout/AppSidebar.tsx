@@ -33,7 +33,7 @@ export function AppSidebar() {
           <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl bg-accent text-sm font-black text-white shadow-[0_0_20px_rgba(138,0,0,0.3)] transition-transform duration-500 group-hover:scale-105">
             V
             {/* Efecto de barrido de luz en el logo */}
-            <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
+            <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-[100%]" />
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-bold tracking-tight text-foreground">
@@ -63,7 +63,7 @@ export function AppSidebar() {
               key={href}
               href={href}
               className={cn(
-                "group relative flex items-center justify-between rounded-xl px-4 py-3 transition-all duration-300",
+                "group relative flex items-center justify-between rounded-xl px-4 py-3 transition-[background-color,color] duration-200",
                 isActive 
                   ? "bg-panel2 text-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]" 
                   : "text-muted hover:bg-panel2/50 hover:text-foreground"
@@ -92,13 +92,13 @@ export function AppSidebar() {
               ) : (
                 <ChevronRight 
                   size={14} 
-                  className="translate-x-[-4px] opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" 
+                  className="translate-x-[-4px] opacity-0 transition-[opacity,transform] duration-200 group-hover:translate-x-0 group-hover:opacity-100"
                 />
               )}
 
               {/* Borde izquierdo dinámico */}
               <div className={cn(
-                "absolute left-0 h-4 w-1 rounded-r-full bg-accent transition-all duration-500",
+                "absolute left-0 h-4 w-1 rounded-r-full bg-accent transition-[opacity,height] duration-200",
                 isActive ? "opacity-100" : "opacity-0 group-hover:h-2 group-hover:opacity-30"
               )} />
             </Link>
@@ -111,7 +111,7 @@ export function AppSidebar() {
         <div className="rounded-2xl border border-white/[0.03] bg-white/[0.01] p-4">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               <span className="text-[10px] font-bold uppercase tracking-widest text-muted/40 text-white/40">System Live</span>
             </div>
             <span className="text-[9px] font-mono text-muted/20 text-white/20">v2.4.0</span>
@@ -129,9 +129,6 @@ export function AppSidebar() {
         </div>
       </div>
 
-      {/* Noise Texture Sutil */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.015] mix-blend-overlay" 
-           style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
     </aside>
   );
 }

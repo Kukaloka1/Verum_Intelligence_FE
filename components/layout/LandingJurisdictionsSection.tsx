@@ -39,7 +39,7 @@ const JURISDICTIONS = [
 
 export function LandingJurisdictionsSection() {
   return (
-    <section id="jurisdictions" className="relative mx-auto max-w-7xl px-6 py-32">
+    <section id="jurisdictions" className="landing-section-lazy relative mx-auto max-w-7xl px-6 py-32">
       
       {/* Header - Alineación de precisión técnica */}
       <div className="mb-20 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -64,16 +64,16 @@ export function LandingJurisdictionsSection() {
         {JURISDICTIONS.map((j) => (
           <div
             key={j.code}
-            className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-panel p-6 transition-all duration-500 ease-out hover:border-accent/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
+            className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-panel p-6 transition-[border-color,box-shadow] duration-300 hover:border-accent/30 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
           >
             {/* Lámpara de acento superior (Top Glow) */}
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
 
             {/* Juris Code + Location Header */}
             <div className="mb-8 flex items-start justify-between">
               <div className="relative">
                 <div className="text-xs font-bold tracking-[0.2em] text-accent/60 mb-1">CODE.SYS</div>
-                <div className="text-4xl font-bold tracking-tighter text-foreground transition-transform duration-500 group-hover:scale-[1.02] origin-left">
+                <div className="text-4xl font-bold tracking-tighter text-foreground origin-left">
                   {j.code}
                 </div>
               </div>
@@ -112,7 +112,7 @@ export function LandingJurisdictionsSection() {
                 {j.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center rounded-md bg-foreground/[0.02] border border-border/60 px-2 py-0.5 text-[10px] font-medium text-muted/60 transition-all group-hover:border-border group-hover:text-muted"
+                    className="inline-flex items-center rounded-md bg-foreground/[0.02] border border-border/60 px-2 py-0.5 text-[10px] font-medium text-muted/60 transition-[border-color,color] duration-200 group-hover:border-border group-hover:text-muted"
                   >
                     {tag}
                   </span>
@@ -120,9 +120,6 @@ export function LandingJurisdictionsSection() {
               </div>
             </div>
 
-            {/* Efecto de ruido sutil interno solo en hover */}
-            <div className="pointer-events-none absolute inset-0 opacity-0 mix-blend-overlay transition-opacity duration-500 group-hover:opacity-[0.03]" 
-                 style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} />
           </div>
         ))}
       </div>

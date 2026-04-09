@@ -12,10 +12,6 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Capa de Ambiente (Atmosphere Layer) 
           Añadimos profundidad sin tocar los colores base 
       */}
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <div className="absolute -left-[10%] -top-[10%] h-[40%] w-[40%] rounded-full bg-accent/5 blur-[120px]" />
-        <div className="absolute -right-[5%] bottom-[5%] h-[30%] w-[30%] rounded-full bg-accent/5 blur-[100px]" />
-      </div>
 
       {/* Main Layout Container */}
       <div className="relative z-10 flex h-full">
@@ -36,7 +32,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             {/* Content Wrapper: 
                 Añadimos una transición sutil de entrada para los 'children'
             */}
-            <div className="mx-auto min-h-full w-full max-w-[1600px] p-4 md:p-6 animate-in fade-in duration-700 ease-out">
+            <div className="mx-auto min-h-full w-full max-w-[1600px] p-4 md:p-6">
               
               {/* Decoración Técnica de Esquina 
                   Refuerza el look de "Workspace" 
@@ -50,11 +46,6 @@ export function AppShell({ children }: { children: ReactNode }) {
               <div className="h-20 w-full md:h-20" />
             </div>
 
-            {/* Noise Texture para consistencia con el Sidebar */}
-            <div 
-              className="pointer-events-none absolute inset-0 z-[-1] opacity-[0.012] mix-blend-overlay" 
-              style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }} 
-            />
           </main>
         </div>
       </div>

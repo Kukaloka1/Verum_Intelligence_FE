@@ -1,74 +1,79 @@
+"use client";
+
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 
 export function LandingCTABanner() {
   return (
     <section className="relative mx-auto max-w-7xl px-6 py-32">
-      {/* Contenedor Principal con efecto de profundidad negativa */}
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-surfaceDark px-10 py-20 md:px-20">
-        
-        {/* Glow de marca ultra-difuso (Atmospheric) */}
+      <div className="relative overflow-hidden rounded-[3rem] border border-white/[0.08] bg-surfaceDark px-8 py-24 md:px-20 md:py-32">
+
+        {/* Subtle dot grid — pure CSS, no external fetch, no blend mode */}
         <div
-          className="pointer-events-none absolute -bottom-48 -left-24 h-[500px] w-[500px] rounded-full opacity-20"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
-            background: "radial-gradient(circle, rgba(var(--accent-rgb), 0.4) 0%, transparent 70%)",
-            filter: "blur(60px)",
+            backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.4) 1px, transparent 0)",
+            backgroundSize: "40px 40px",
           }}
         />
-        
-        {/* Línea de luz superior (The Rim Light) */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
 
-        {/* Content Layout */}
+        {/* Rim lights */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.12] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
+
+        {/* Corner brackets */}
+        <div className="pointer-events-none absolute left-8 top-8 h-8 w-8 border-l border-t border-white/10" />
+        <div className="pointer-events-none absolute right-8 bottom-8 h-8 w-8 border-r border-b border-white/10" />
+
         <div className="relative z-10 flex flex-col items-center text-center">
-          
-          {/* Eyebrow con tracking extremo */}
-          <div className="mb-6 text-[10px] font-bold uppercase tracking-[0.4em] text-background">
-            Ready to navigate the GCC?
+
+          <div className="mb-8 flex items-center gap-4">
+            <div className="h-px w-6 bg-accent/40" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent">
+              Access Protocol // Ready to navigate the GCC?
+            </span>
+            <div className="h-px w-6 bg-accent/40" />
           </div>
 
-          {/* Headline - Compacto y autoritario */}
-          <h2 className="mb-6 max-w-2xl text-4xl font-medium leading-[1.1] tracking-tight text-background md:text-5xl">
-            Explore the product direction now.
+          <h2 className="mb-8 max-w-3xl text-balance text-4xl font-medium leading-[1.05] tracking-tighter text-background md:text-6xl lg:text-7xl">
+            Explore the product <br className="hidden md:block" />
+            <span className="text-white/40">direction now.</span>
           </h2>
 
-          {/* Subtext - Equilibrado para lectura rápida */}
-          <p className="mb-12 max-w-xl text-base font-light leading-relaxed text-background">
-            Move through the core product surfaces — AI Query, Compliance
-            Dashboard, Framework Comparison, and Market Entry Toolkit.
+          <p className="mb-14 max-w-xl text-balance text-base font-light leading-relaxed text-background/60 md:text-lg">
+            Move through the core product surfaces —{" "}
+            <span className="text-background/80">AI Query</span>,{" "}
+            <span className="text-background/80">Compliance Dashboard</span>,{" "}
+            <span className="text-background/80">Framework Comparison</span>, and{" "}
+            <span className="text-background/80">Market Entry Toolkit</span>.
           </p>
 
-          {/* Único Botón: Sign In (The "Closing" Action) */}
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-8">
             <Link
               href={ROUTES.login}
-              className="group relative flex items-center justify-center overflow-hidden rounded-full bg-accent px-10 py-4 text-sm font-semibold text-white shadow-[0_0_0_1px_rgba(var(--accent-rgb),1),0_10px_30px_-10px_rgba(var(--accent-rgb),0.5),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-500 hover:scale-[1.02] hover:bg-accentHover active:scale-[0.98]"
+              className="group relative flex items-center justify-center overflow-hidden rounded-2xl bg-accent px-12 py-5 text-sm font-bold uppercase tracking-widest text-white transition-[background-color,transform] duration-200 hover:scale-[1.02] hover:bg-accentHover active:scale-[0.98]"
             >
-              {/* Brillo dinámico interno en el botón */}
-              <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
-              
-              <span className="relative z-10 flex items-center gap-3">
-                Sign In to Verum
-                <span className="text-lg transition-transform duration-500 group-hover:translate-x-1">→</span>
+              <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-[100%]" />
+              <span className="relative z-10 flex items-center gap-4">
+                Sign In to Verum Intelligence
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-200 group-hover:translate-x-1">
+                  <path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </span>
             </Link>
 
-            {/* Micro-label de seguridad/estatus */}
-            <div className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-widest text-background">
-              <span className="h-1 w-1 rounded-full bg-emerald-500/50" />
-              Enterprise-grade secure access
+            <div className="flex items-center gap-4 rounded-full border border-white/5 bg-black/20 px-4 py-2">
+              <div className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/40">System Online</span>
+              </div>
+              <div className="h-3 w-px bg-white/10" />
+              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/20">
+                Enterprise-grade secure access
+              </span>
             </div>
           </div>
         </div>
-
-        {/* Decoración de fondo: Grid técnico tenue */}
-        <div 
-          className="absolute inset-0 z-0 opacity-[0.02] mix-blend-overlay"
-          style={{ 
-            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)`,
-            backgroundSize: '32px 32px' 
-          }}
-        />
       </div>
     </section>
   );

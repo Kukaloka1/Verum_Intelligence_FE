@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { postQueryRequest } from "@/lib/api/query";
 import type {
   QueryErrorResponse,
@@ -14,6 +14,8 @@ const DEFAULT_QUERY =
   "What are the licensing implications for a fintech firm in DIFC?";
 const DEFAULT_JURISDICTION = "DIFC";
 const MAX_HISTORY_ENTRIES = 8;
+const REQUEST_TIMEOUT_MS = 12000;
+const DEBUG_QUERY_FLOW = process.env.NODE_ENV !== "production";
 
 interface UseQueryFlowOptions {
   initialQuery?: string;
@@ -64,6 +66,18 @@ function buildClientSystemErrorResponse(input: {
   };
 }
 
+function logQueryFlow(event: string, payload: Record<string, unknown>) {
+  if (!DEBUG_QUERY_FLOW) {
+    return;
+  }
+
+  console.info("[query-flow]", event, payload);
+}
+
+function toDurationMs(startedAt: number): number {
+  return Number((performance.now() - startedAt).toFixed(2));
+}
+
 export function useQueryFlow(options: UseQueryFlowOptions = {}) {
   const userId = options.userId ?? null;
   const canSaveQuery = Boolean(userId);
@@ -78,6 +92,31 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
   const [history, setHistory] = useState<QueryHistoryEntry[]>([]);
 
   const requestIdRef = useRef(0);
+  const activeAbortControllerRef = useRef<AbortController | null>(null);
+  const previousViewStateRef = useRef<QueryViewState>("idle");
+
+  useEffect(() => {
+    return () => {
+      activeAbortControllerRef.current?.abort();
+      activeAbortControllerRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!DEBUG_QUERY_FLOW) {
+      previousViewStateRef.current = viewState;
+      return;
+    }
+
+    if (previousViewStateRef.current !== viewState) {
+      logQueryFlow("view_state_transition", {
+        from: previousViewStateRef.current,
+        to: viewState,
+        resultStatus: response?.resultStatus ?? null
+      });
+      previousViewStateRef.current = viewState;
+    }
+  }, [viewState, response]);
 
   const resetToIdle = useCallback(() => {
     setResponse(null);
@@ -98,8 +137,23 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
   }, []);
 
   const submitQuery = useCallback(async () => {
+    if (viewState === "loading") {
+      logQueryFlow("submit_ignored_loading_in_progress", {
+        requestId: requestIdRef.current
+      });
+      return;
+    }
+
     const activeRequestId = requestIdRef.current + 1;
     requestIdRef.current = activeRequestId;
+    const submittedAt = performance.now();
+
+    activeAbortControllerRef.current?.abort();
+    const abortController = new AbortController();
+    activeAbortControllerRef.current = abortController;
+    const timeout = setTimeout(() => abortController.abort(), REQUEST_TIMEOUT_MS);
+
+    setResponse(null);
     setViewState("loading");
 
     const requestBody: QueryRequestBody = {
@@ -109,9 +163,23 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
       saveQuery: canSaveQuery ? saveQuery : false
     };
 
+    logQueryFlow("submit_start", {
+      requestId: activeRequestId,
+      queryLength: query.length,
+      jurisdiction,
+      hasUserId: Boolean(userId),
+      saveQuery: requestBody.saveQuery
+    });
+
     try {
-      const result = await postQueryRequest(requestBody);
+      const result = await postQueryRequest(requestBody, {
+        signal: abortController.signal
+      });
+
       if (requestIdRef.current !== activeRequestId) {
+        logQueryFlow("submit_response_ignored_stale", {
+          requestId: activeRequestId
+        });
         return;
       }
 
@@ -123,12 +191,27 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
           MAX_HISTORY_ENTRIES
         )
       );
+
+      logQueryFlow("submit_success", {
+        requestId: activeRequestId,
+        httpStatus: result.httpStatus,
+        resultStatus: result.payload.resultStatus,
+        durationMs: toDurationMs(submittedAt)
+      });
     } catch (error) {
       if (requestIdRef.current !== activeRequestId) {
+        logQueryFlow("submit_error_ignored_stale", {
+          requestId: activeRequestId
+        });
         return;
       }
 
-      const message = error instanceof Error ? error.message : "Unknown frontend query failure.";
+      const message =
+        error instanceof Error && error.name === "AbortError"
+          ? `Query request timed out after ${REQUEST_TIMEOUT_MS}ms.`
+          : error instanceof Error
+            ? error.message
+            : "Unknown frontend query failure.";
       const fallbackResponse = buildClientSystemErrorResponse({ message, jurisdiction });
 
       setResponse(fallbackResponse);
@@ -139,8 +222,19 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
           MAX_HISTORY_ENTRIES
         )
       );
+
+      logQueryFlow("submit_failure", {
+        requestId: activeRequestId,
+        message,
+        durationMs: toDurationMs(submittedAt)
+      });
+    } finally {
+      clearTimeout(timeout);
+      if (activeAbortControllerRef.current === abortController) {
+        activeAbortControllerRef.current = null;
+      }
     }
-  }, [query, jurisdiction, userId, canSaveQuery, saveQuery]);
+  }, [query, jurisdiction, userId, canSaveQuery, saveQuery, viewState]);
 
   const validationDetails = useMemo(() => {
     if (!response || response.resultStatus !== "validation_error") {
@@ -201,4 +295,3 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
     applyHistoryEntry
   };
 }
-

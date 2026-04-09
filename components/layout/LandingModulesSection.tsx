@@ -54,7 +54,7 @@ export function LandingModulesSection() {
   const secondary = MODULES.filter((m) => m.size === "small");
 
   return (
-    <section id="what-we-do" className="relative mx-auto max-w-7xl px-6 py-32">
+    <section id="what-we-do" className="landing-section-lazy relative mx-auto max-w-7xl px-6 py-32">
       
       {/* Header con spacing agresivo y tipografía refinada */}
       <div className="mb-20">
@@ -69,20 +69,19 @@ export function LandingModulesSection() {
       </div>
 
       {/* Bento grid con gaps técnicos de 1px (estilo bento moderno) */}
-      <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[2.5rem] border border-border bg-border shadow-2xl">
+      <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[2.5rem] border border-border bg-border">
 
         {/* Hero module — El ancla visual */}
         <Link
           href={hero.href}
-          className="group relative col-span-1 flex flex-col justify-between bg-panel p-10 transition-all duration-700 ease-in-out hover:bg-panel2 lg:col-span-2 lg:row-span-2"
+          className="group relative col-span-1 flex flex-col justify-between bg-panel p-10 transition-[background-color] duration-300 hover:bg-panel2 lg:col-span-2 lg:row-span-2"
         >
           {/* Efecto de luz ambiental en la esquina */}
-          <div className="absolute -right-20 -top-20 h-[300px] w-[300px] bg-accent/10 blur-[100px] transition-opacity duration-1000 group-hover:opacity-100 opacity-50" />
           
           <div className="relative z-10">
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-accent">
               <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75"></span>
+                <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-40"></span>
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent"></span>
               </span>
               {hero.tag}
@@ -97,7 +96,7 @@ export function LandingModulesSection() {
           </div>
 
           <div className="relative z-10 mt-16 flex items-center gap-3 text-sm font-medium text-foreground/40 transition-colors group-hover:text-accent">
-            <div className="h-px w-8 bg-border transition-all group-hover:w-12 group-hover:bg-accent" />
+            <div className="h-px w-8 bg-border transition-[width,background-color] duration-200 group-hover:w-12 group-hover:bg-accent" />
             <span>Explore core module</span>
           </div>
         </Link>
@@ -107,7 +106,7 @@ export function LandingModulesSection() {
           <Link
             key={m.id}
             href={m.href}
-            className="group relative flex flex-col justify-between bg-panel p-8 transition-all duration-500 hover:bg-panel2"
+            className="group relative flex flex-col justify-between bg-panel p-8 transition-[background-color] duration-300 hover:bg-panel2"
           >
             {/* Overlay sutil de hover */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.01] to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
@@ -126,7 +125,7 @@ export function LandingModulesSection() {
 
             <div className="relative z-10 mt-8 flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-muted/30 transition-colors group-hover:text-foreground">
               <span>Initialize</span>
-              <span className="translate-x-[-10px] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+              <span className="translate-x-[-10px] opacity-0 transition-[transform,opacity] duration-200 group-hover:translate-x-0 group-hover:opacity-100">
                 →
               </span>
             </div>
