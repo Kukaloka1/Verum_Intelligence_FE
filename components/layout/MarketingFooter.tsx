@@ -149,7 +149,7 @@ export function MarketingFooter() {
                 className="transition-opacity duration-200 hover:opacity-80"
               >
                 <Image
-                  src="/logos/bit.svg"
+                  src="/logos/bit.png"
                   alt="Bittechnetwork"
                   width={360}
                   height={120}
@@ -210,7 +210,7 @@ export function MarketingFooter() {
             className="transition-opacity duration-200 hover:opacity-80"
           >
             <Image
-              src="/logos/bit.svg"
+              src="/logos/bit.png"
               alt="Bittechnetwork"
               width={360}
               height={120}

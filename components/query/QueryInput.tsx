@@ -1,6 +1,7 @@
 import { Textarea } from "@/components/shared/Textarea";
 import { JurisdictionSelector } from "./JurisdictionSelector";
 import { QueryActions } from "./QueryActions";
+import { QueryPromptSuggestions } from "./QueryPromptSuggestions";
 
 interface QueryInputProps {
   query: string;
@@ -83,6 +84,13 @@ export function QueryInput({
           <span>{query.length}/4000</span>
         </div>
       </div>
+
+      <QueryPromptSuggestions
+        jurisdiction={jurisdiction}
+        currentQuery={query}
+        disabled={isLoading}
+        onSelectPrompt={onQueryChange}
+      />
 
       <div className="flex flex-col gap-4">
         {validationDetails.length > 0 ? (

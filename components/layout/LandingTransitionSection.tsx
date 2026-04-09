@@ -40,7 +40,7 @@ export function LandingTransitionSection() {
 
         {/* Divider + body copy side by side on desktop */}
         <div className="mt-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <p className="max-w-lg text-sm font-light leading-relaxed text-background/60 md:text-base">
+          <p className="max-w-lg text-sm font-light leading-relaxed text-white/60 md:text-base">
             In the GCC, enforcement posture shifts quarterly. Consultation windows open and close.
             Licensing thresholds move with policy cycles.
             The gap between informed and exposed is measured in weeks, not years.

@@ -3,6 +3,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { postQueryRequest } from "@/lib/api/query";
 import { detectJurisdictionMismatch } from "@/lib/query/jurisdiction-mismatch";
+import {
+  PRESET_QUERY_VALUES,
+  QUERY_PLACEHOLDERS_BY_JURISDICTION,
+  resolveQueryPlaceholder
+} from "@/lib/query/preset-queries";
 import { resolveQueryStatusMessage } from "@/lib/query/status-message";
 import type {
   QueryErrorResponse,
@@ -12,32 +17,14 @@ import type {
   QueryViewState
 } from "@/types/query";
 
-const QUERY_PLACEHOLDERS_BY_JURISDICTION: Record<string, string> = {
-  "__all__":
-    "Compare licensing obligations for a fintech payment firm in DIFC and ADGM.",
-  DIFC: "What are the licensing implications for a fintech firm in DIFC?",
-  ADGM: "What are the FSRA licensing implications for a fintech firm in ADGM?",
-  QFC: "What are the licensing implications for a fintech firm in QFC?",
-  KSA: "What are the licensing implications for a fintech firm in KSA?"
-};
 const DEFAULT_JURISDICTION = "DIFC";
 const DEFAULT_QUERY = QUERY_PLACEHOLDERS_BY_JURISDICTION[DEFAULT_JURISDICTION];
 const MAX_HISTORY_ENTRIES = 40;
 const DEFAULT_REQUEST_TIMEOUT_MS = 22000;
 const DEBUG_QUERY_FLOW = process.env.NODE_ENV !== "production";
 
-function resolveQueryPlaceholder(jurisdiction: string | null): string {
-  if (!jurisdiction) {
-    return QUERY_PLACEHOLDERS_BY_JURISDICTION.__all__;
-  }
-
-  return QUERY_PLACEHOLDERS_BY_JURISDICTION[jurisdiction] ?? QUERY_PLACEHOLDERS_BY_JURISDICTION.__all__;
-}
-
-const PRESET_QUERY_SET = new Set(Object.values(QUERY_PLACEHOLDERS_BY_JURISDICTION));
-
 function isPresetQueryValue(value: string): boolean {
-  return PRESET_QUERY_SET.has(value.trim());
+  return PRESET_QUERY_VALUES.has(value.trim());
 }
 
 function resolveRequestTimeoutMs(): number {
@@ -201,21 +188,34 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
     setPreSubmitWarning(null);
   }, [query, jurisdiction, preSubmitWarning]);
 
-  const resetToIdle = useCallback(() => {
+  const clearQueryState = useCallback(() => {
     setResponse(null);
     setViewState("idle");
     setPreSubmitWarning(null);
   }, []);
 
+  const resetToIdle = useCallback(() => {
+    clearQueryState();
+  }, [clearQueryState]);
+
   const resetForm = useCallback(() => {
     setQuery(DEFAULT_QUERY);
     setJurisdiction(DEFAULT_JURISDICTION);
     setSaveQuery(false);
-    setPreSubmitWarning(null);
-  }, []);
+    clearQueryState();
+  }, [clearQueryState]);
+
+  const handleQueryChange = useCallback(
+    (nextQuery: string) => {
+      setQuery(nextQuery);
+      clearQueryState();
+    },
+    [clearQueryState]
+  );
 
   const handleJurisdictionChange = useCallback((nextJurisdiction: string | null) => {
     setJurisdiction(nextJurisdiction);
+    clearQueryState();
 
     setQuery((currentQuery) => {
       if (currentQuery.trim().length === 0) {
@@ -228,7 +228,7 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
 
       return resolveQueryPlaceholder(nextJurisdiction);
     });
-  }, []);
+  }, [clearQueryState]);
 
   const applyHistoryEntry = useCallback((entry: QueryHistoryEntry) => {
     setQuery(entry.query);
@@ -402,7 +402,7 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
     validationDetails,
     statusMessage,
     isLoading: viewState === "loading",
-    setQuery,
+    setQuery: handleQueryChange,
     setJurisdiction: handleJurisdictionChange,
     setSaveQuery,
     submitQuery,

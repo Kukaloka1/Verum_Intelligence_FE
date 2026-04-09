@@ -10,7 +10,7 @@ import { MarketingFooter } from "@/components/layout/MarketingFooter";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-[var(--background)] text-white">
+    <main className="min-h-screen bg-[var(--background)] text-foreground">
       <MarketingHeader />
       <HeroSection />
       <LandingAudienceSection />
