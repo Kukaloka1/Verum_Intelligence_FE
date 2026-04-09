@@ -26,6 +26,7 @@ export function QueryPageShell() {
               saveQuery={queryFlow.saveQuery}
               canSaveQuery={queryFlow.canSaveQuery}
               isLoading={queryFlow.isLoading}
+              preSubmitWarning={queryFlow.preSubmitWarning}
               validationDetails={queryFlow.validationDetails}
               onQueryChange={queryFlow.setQuery}
               onJurisdictionChange={queryFlow.setJurisdiction}
@@ -39,6 +40,7 @@ export function QueryPageShell() {
             <QueryHistoryPanel
               entries={queryFlow.history}
               onUseEntry={queryFlow.applyHistoryEntry}
+              onDeleteEntry={queryFlow.removeHistoryEntry}
             />
           </Card>
         </div>
@@ -56,4 +58,3 @@ export function QueryPageShell() {
     </div>
   );
 }
-

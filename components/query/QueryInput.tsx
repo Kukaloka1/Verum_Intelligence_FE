@@ -8,6 +8,7 @@ interface QueryInputProps {
   saveQuery: boolean;
   canSaveQuery: boolean;
   isLoading: boolean;
+  preSubmitWarning?: string | null;
   validationDetails: string[];
   onQueryChange: (value: string) => void;
   onJurisdictionChange: (value: string | null) => void;
@@ -22,6 +23,7 @@ export function QueryInput({
   saveQuery,
   canSaveQuery,
   isLoading,
+  preSubmitWarning,
   validationDetails,
   onQueryChange,
   onJurisdictionChange,
@@ -85,6 +87,15 @@ export function QueryInput({
               </li>
             ))}
           </ul>
+        </div>
+      ) : null}
+
+      {preSubmitWarning ? (
+        <div className="rounded-2xl border border-amber-500/35 bg-amber-500/10 p-3 text-sm text-foreground">
+          <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-600">
+            Jurisdiction check
+          </div>
+          <p className="mt-2 text-sm text-foreground/90">{preSubmitWarning}</p>
         </div>
       ) : null}
 

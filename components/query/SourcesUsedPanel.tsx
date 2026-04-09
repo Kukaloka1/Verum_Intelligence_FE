@@ -21,22 +21,23 @@ function sourceSupportLabel(sourcesUsed: number) {
 
 export function SourcesUsedPanel({ sourcesUsed, jurisdiction }: SourcesUsedPanelProps) {
   return (
-    <section className="rounded-2xl border border-border bg-background p-4">
+    <section className="rounded-2xl border border-border bg-background p-4 md:p-5">
       <div className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
         Traceability
       </div>
 
-      <div className="mt-2 flex flex-wrap items-end justify-between gap-2">
+      <div className="mt-3 flex flex-wrap items-end justify-between gap-2">
         <div>
-          <p className="text-2xl font-semibold text-foreground">{sourcesUsed}</p>
-          <p className="text-xs text-muted">Sources used</p>
+          <p className="text-3xl font-semibold text-foreground">{sourcesUsed}</p>
+          <p className="text-xs uppercase tracking-[0.12em] text-muted">Sources used</p>
         </div>
         <div className="text-right">
-          <p className="text-xs font-medium text-foreground">{sourceSupportLabel(sourcesUsed)}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-foreground/90">
+            {sourceSupportLabel(sourcesUsed)}
+          </p>
           <p className="text-xs text-muted">Jurisdiction: {jurisdiction ?? "All"}</p>
         </div>
       </div>
     </section>
   );
 }
-

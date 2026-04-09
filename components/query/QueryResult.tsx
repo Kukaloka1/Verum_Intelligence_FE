@@ -49,8 +49,8 @@ export function QueryResult({
   const resolvedJurisdiction = response?.jurisdiction ?? jurisdictionSelection ?? "All";
 
   return (
-    <div className="space-y-4 md:space-y-5">
-      <header className="rounded-2xl border border-border bg-background p-4">
+    <div className="space-y-5 md:space-y-6">
+      <header className="rounded-2xl border border-border bg-background p-4 md:p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted">
             Query Result
@@ -74,7 +74,9 @@ export function QueryResult({
           {response ? <span>Query ID: {response.queryId ?? "n/a"}</span> : null}
         </div>
 
-        {statusMessage ? <p className="mt-2 text-sm text-foreground/85">{statusMessage}</p> : null}
+        {statusMessage ? (
+          <p className="mt-3 max-w-[74ch] text-sm leading-relaxed text-foreground/85">{statusMessage}</p>
+        ) : null}
       </header>
 
       {viewState === "idle" ? <QueryEmptyState mode="idle" /> : null}
@@ -90,18 +92,20 @@ export function QueryResult({
       ) : null}
 
       {response && response.resultStatus === "no_results" ? (
-        <>
+        <div className="space-y-4">
           <QueryEmptyState
             mode="no_results"
             summary={response.answer.summary}
             limitations={response.answer.limitations}
           />
-          <SourcesUsedPanel
-            sourcesUsed={response.sourcesUsed}
-            jurisdiction={response.jurisdiction}
-          />
-          <CitationList citations={response.citations} />
-        </>
+          <div className="grid gap-3 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+            <SourcesUsedPanel
+              sourcesUsed={response.sourcesUsed}
+              jurisdiction={response.jurisdiction}
+            />
+            <CitationList citations={response.citations} />
+          </div>
+        </div>
       ) : null}
 
       {response && isErrorResponse(response) ? (
@@ -116,25 +120,40 @@ export function QueryResult({
       ) : null}
 
       {response && isRenderableSuccess(response) ? (
-        <>
-          <QuerySummary summary={response.answer.summary} status={response.resultStatus} />
-          <QueryStructuredBody sections={response.answer.body} />
+        <div className="space-y-4">
+          <section className="space-y-5 rounded-2xl border border-border bg-background p-4 md:p-5">
+            <QuerySummary summary={response.answer.summary} status={response.resultStatus} />
+            <div className="h-px bg-border" />
+            <QueryStructuredBody sections={response.answer.body} />
 
-          {response.resultStatus === "partial" || response.answer.limitations ? (
-            <QueryLimitations
-              limitations={
-                response.answer.limitations ??
-                "This response has partial evidence support and should be validated against primary materials."
-              }
+            {response.resultStatus === "partial" || response.answer.limitations ? (
+              <QueryLimitations
+                limitations={
+                  response.answer.limitations ??
+                  "A partial answer was produced with limited evidence support."
+                }
+                reason={
+                  response.resultStatus === "partial"
+                    ? "The retrieval layer found only a narrow set of supporting records for part of the request."
+                    : undefined
+                }
+                nextStep={
+                  response.resultStatus === "partial"
+                    ? "Narrow the question to one obligation/topic, or rerun with adjusted jurisdiction and verify against citations."
+                    : undefined
+                }
+              />
+            ) : null}
+          </section>
+
+          <div className="grid gap-3 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+            <SourcesUsedPanel
+              sourcesUsed={response.sourcesUsed}
+              jurisdiction={response.jurisdiction}
             />
-          ) : null}
-
-          <SourcesUsedPanel
-            sourcesUsed={response.sourcesUsed}
-            jurisdiction={response.jurisdiction}
-          />
-          <CitationList citations={response.citations} />
-        </>
+            <CitationList citations={response.citations} />
+          </div>
+        </div>
       ) : null}
     </div>
   );

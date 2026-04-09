@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { postQueryRequest } from "@/lib/api/query";
+import { detectJurisdictionMismatch } from "@/lib/query/jurisdiction-mismatch";
+import { resolveQueryStatusMessage } from "@/lib/query/status-message";
 import type {
   QueryErrorResponse,
   QueryHistoryEntry,
@@ -13,7 +15,7 @@ import type {
 const DEFAULT_QUERY =
   "What are the licensing implications for a fintech firm in DIFC?";
 const DEFAULT_JURISDICTION = "DIFC";
-const MAX_HISTORY_ENTRIES = 8;
+const MAX_HISTORY_ENTRIES = 40;
 const REQUEST_TIMEOUT_MS = 12000;
 const DEBUG_QUERY_FLOW = process.env.NODE_ENV !== "production";
 
@@ -38,8 +40,39 @@ function buildHistoryEntry(input: {
   };
 }
 
-function buildClientSystemErrorResponse(input: {
+function buildClientValidationErrorResponse(input: {
+  jurisdiction: string | null;
   message: string;
+  details: string[];
+  limitations?: string;
+}): QueryErrorResponse {
+  return {
+    resultStatus: "validation_error",
+    queryId: null,
+    jurisdiction: input.jurisdiction,
+    answer: {
+      summary: "Query request needs adjustment before execution.",
+      body: [
+        {
+          sectionTitle: "Input alignment",
+          content: "The query and selected scope must be aligned before submission."
+        }
+      ],
+      limitations:
+        input.limitations ??
+        "The request was blocked locally to avoid sending a conflicting jurisdiction scope."
+    },
+    citations: [],
+    sourcesUsed: 0,
+    error: {
+      code: "validation_error",
+      message: input.message,
+      details: input.details
+    }
+  };
+}
+
+function buildClientSystemErrorResponse(input: {
   jurisdiction: string | null;
 }): QueryErrorResponse {
   return {
@@ -51,17 +84,21 @@ function buildClientSystemErrorResponse(input: {
       body: [
         {
           sectionTitle: "Execution status",
-          content: "System failure while reaching the query backend."
+          content: "The request could not be completed due to a temporary service interruption."
         }
       ],
-      limitations: "The frontend could not complete a valid request to /v1/query."
+      limitations:
+        "No result was produced for this attempt. Retry the request after a short pause."
     },
     citations: [],
     sourcesUsed: 0,
     error: {
       code: "system_error",
-      message: input.message,
-      details: ["Inspect frontend/backend connectivity and API URL configuration."]
+      message: "The query could not be completed right now.",
+      details: [
+        "Wait a moment and retry.",
+        "If it keeps failing, rephrase the question and submit again."
+      ]
     }
   };
 }
@@ -90,6 +127,7 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
   const [viewState, setViewState] = useState<QueryViewState>("idle");
   const [response, setResponse] = useState<QueryResponse | null>(null);
   const [history, setHistory] = useState<QueryHistoryEntry[]>([]);
+  const [preSubmitWarning, setPreSubmitWarning] = useState<string | null>(null);
 
   const requestIdRef = useRef(0);
   const activeAbortControllerRef = useRef<AbortController | null>(null);
@@ -118,15 +156,25 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
     }
   }, [viewState, response]);
 
+  useEffect(() => {
+    if (!preSubmitWarning) {
+      return;
+    }
+
+    setPreSubmitWarning(null);
+  }, [query, jurisdiction, preSubmitWarning]);
+
   const resetToIdle = useCallback(() => {
     setResponse(null);
     setViewState("idle");
+    setPreSubmitWarning(null);
   }, []);
 
   const resetForm = useCallback(() => {
     setQuery(DEFAULT_QUERY);
     setJurisdiction(DEFAULT_JURISDICTION);
     setSaveQuery(false);
+    setPreSubmitWarning(null);
   }, []);
 
   const applyHistoryEntry = useCallback((entry: QueryHistoryEntry) => {
@@ -136,6 +184,10 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
     setViewState("idle");
   }, []);
 
+  const removeHistoryEntry = useCallback((entryId: string) => {
+    setHistory((previous) => previous.filter((entry) => entry.id !== entryId));
+  }, []);
+
   const submitQuery = useCallback(async () => {
     if (viewState === "loading") {
       logQueryFlow("submit_ignored_loading_in_progress", {
@@ -143,6 +195,38 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
       });
       return;
     }
+
+    const mismatch = detectJurisdictionMismatch({ query, jurisdiction });
+    if (mismatch) {
+      const warning = `Selected jurisdiction ${mismatch.selectedJurisdiction} conflicts with query terms (${mismatch.matchedTerms.join(
+        ", "
+      )}). Choose the matching jurisdiction or use All jurisdictions.`;
+
+      setPreSubmitWarning(warning);
+
+      const mismatchResponse = buildClientValidationErrorResponse({
+        jurisdiction,
+        message: "Jurisdiction scope conflicts with terms in the query text.",
+        details: [
+          `Selected scope: ${mismatch.selectedJurisdiction}`,
+          `Detected conflicting terms: ${mismatch.matchedTerms.join(", ")}`,
+          "Choose a matching jurisdiction or set scope to All jurisdictions before submitting."
+        ],
+        limitations:
+          "The request was blocked before backend execution because scope and query terms conflict."
+      });
+
+      setResponse(mismatchResponse);
+      setViewState("validation_error");
+
+      logQueryFlow("submit_blocked_jurisdiction_mismatch", {
+        selectedJurisdiction: mismatch.selectedJurisdiction,
+        matchedTerms: mismatch.matchedTerms
+      });
+      return;
+    }
+
+    setPreSubmitWarning(null);
 
     const activeRequestId = requestIdRef.current + 1;
     requestIdRef.current = activeRequestId;
@@ -212,7 +296,7 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
           : error instanceof Error
             ? error.message
             : "Unknown frontend query failure.";
-      const fallbackResponse = buildClientSystemErrorResponse({ message, jurisdiction });
+      const fallbackResponse = buildClientSystemErrorResponse({ jurisdiction });
 
       setResponse(fallbackResponse);
       setViewState("system_error");
@@ -245,33 +329,7 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
   }, [response]);
 
   const statusMessage = useMemo(() => {
-    if (!response) {
-      return null;
-    }
-
-    if (response.resultStatus === "rate_limited") {
-      return response.error.code === "DUPLICATE_QUERY_SUBMISSION"
-        ? "Duplicate request blocked within short dedup window."
-        : "Rate limit reached for this actor window.";
-    }
-
-    if (response.resultStatus === "validation_error") {
-      return "Request validation failed. Review query input.";
-    }
-
-    if (response.resultStatus === "system_error") {
-      return "Backend/system error while processing query.";
-    }
-
-    if (response.resultStatus === "no_results") {
-      return "No grounded source support found for current query scope.";
-    }
-
-    if (response.resultStatus === "partial") {
-      return "Partial grounded result with limited support.";
-    }
-
-    return "Grounded query completed successfully.";
+    return resolveQueryStatusMessage(response);
   }, [response]);
 
   return {
@@ -283,6 +341,7 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
     viewState,
     response,
     history,
+    preSubmitWarning,
     validationDetails,
     statusMessage,
     isLoading: viewState === "loading",
@@ -292,6 +351,7 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
     submitQuery,
     resetToIdle,
     resetForm,
-    applyHistoryEntry
+    applyHistoryEntry,
+    removeHistoryEntry
   };
 }
