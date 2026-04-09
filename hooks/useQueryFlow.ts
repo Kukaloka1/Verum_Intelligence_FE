@@ -12,12 +12,33 @@ import type {
   QueryViewState
 } from "@/types/query";
 
-const DEFAULT_QUERY =
-  "What are the licensing implications for a fintech firm in DIFC?";
+const QUERY_PLACEHOLDERS_BY_JURISDICTION: Record<string, string> = {
+  "__all__":
+    "Compare licensing obligations for a fintech payment firm in DIFC and ADGM.",
+  DIFC: "What are the licensing implications for a fintech firm in DIFC?",
+  ADGM: "What are the FSRA licensing implications for a fintech firm in ADGM?",
+  QFC: "What are the licensing implications for a fintech firm in QFC?",
+  KSA: "What are the licensing implications for a fintech firm in KSA?"
+};
 const DEFAULT_JURISDICTION = "DIFC";
+const DEFAULT_QUERY = QUERY_PLACEHOLDERS_BY_JURISDICTION[DEFAULT_JURISDICTION];
 const MAX_HISTORY_ENTRIES = 40;
 const DEFAULT_REQUEST_TIMEOUT_MS = 22000;
 const DEBUG_QUERY_FLOW = process.env.NODE_ENV !== "production";
+
+function resolveQueryPlaceholder(jurisdiction: string | null): string {
+  if (!jurisdiction) {
+    return QUERY_PLACEHOLDERS_BY_JURISDICTION.__all__;
+  }
+
+  return QUERY_PLACEHOLDERS_BY_JURISDICTION[jurisdiction] ?? QUERY_PLACEHOLDERS_BY_JURISDICTION.__all__;
+}
+
+const PRESET_QUERY_SET = new Set(Object.values(QUERY_PLACEHOLDERS_BY_JURISDICTION));
+
+function isPresetQueryValue(value: string): boolean {
+  return PRESET_QUERY_SET.has(value.trim());
+}
 
 function resolveRequestTimeoutMs(): number {
   const rawValue = process.env.NEXT_PUBLIC_QUERY_REQUEST_TIMEOUT_MS;
@@ -193,6 +214,22 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
     setPreSubmitWarning(null);
   }, []);
 
+  const handleJurisdictionChange = useCallback((nextJurisdiction: string | null) => {
+    setJurisdiction(nextJurisdiction);
+
+    setQuery((currentQuery) => {
+      if (currentQuery.trim().length === 0) {
+        return currentQuery;
+      }
+
+      if (!isPresetQueryValue(currentQuery)) {
+        return currentQuery;
+      }
+
+      return resolveQueryPlaceholder(nextJurisdiction);
+    });
+  }, []);
+
   const applyHistoryEntry = useCallback((entry: QueryHistoryEntry) => {
     setQuery(entry.query);
     setJurisdiction(entry.jurisdiction);
@@ -349,6 +386,8 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
     return resolveQueryStatusMessage(response);
   }, [response]);
 
+  const queryPlaceholder = useMemo(() => resolveQueryPlaceholder(jurisdiction), [jurisdiction]);
+
   return {
     query,
     jurisdiction,
@@ -359,11 +398,12 @@ export function useQueryFlow(options: UseQueryFlowOptions = {}) {
     response,
     history,
     preSubmitWarning,
+    queryPlaceholder,
     validationDetails,
     statusMessage,
     isLoading: viewState === "loading",
     setQuery,
-    setJurisdiction,
+    setJurisdiction: handleJurisdictionChange,
     setSaveQuery,
     submitQuery,
     resetToIdle,

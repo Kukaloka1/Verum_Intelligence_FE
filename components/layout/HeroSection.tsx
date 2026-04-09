@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
+import { GoogleIcon } from "@/components/shared/GoogleIcon";
 
 export function HeroSection() {
   return (
@@ -53,21 +54,22 @@ export function HeroSection() {
         {/* CTAs - Diseño de botón ultra premium con sombras interiores */}
         <div className="mt-12 flex flex-wrap items-center gap-4">
           <Link
-            href={ROUTES.query}
+            href={ROUTES.login}
             className="group relative inline-flex items-center gap-2.5 rounded-xl border border-accent/50 bg-accent px-7 py-3.5 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_2px_12px_rgba(var(--accent-rgb),0.25)] transition-[background-color,box-shadow] duration-300 hover:bg-accentHover hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25),0_4px_24px_rgba(var(--accent-rgb),0.4)]"
           >
+            <GoogleIcon className="h-4 w-4 rounded-full bg-white p-[1px]" />
             Explore AI Query
             <span className="transition-transform duration-200 group-hover:translate-x-1">
               →
             </span>
           </Link>
           
-          <Link
-            href={ROUTES.dashboard}
+          <a
+            href="mailto:verumlavineandco@gmail.com"
             className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.02] px-7 py-3.5 text-sm font-medium text-white/70 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.02)] transition-[background-color,color] duration-300 hover:bg-white/[0.06] hover:text-white"
           >
-            View Dashboard
-          </Link>
+            Contact
+          </a>
         </div>
 
         {/* Trust bar - Ticker técnico, alineación perfecta y separadores tenues */}

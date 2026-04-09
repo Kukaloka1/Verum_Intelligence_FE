@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { GoogleIcon } from "@/components/shared/GoogleIcon";
 
 export function MarketingHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,16 +76,24 @@ export function MarketingHeader() {
             </nav>
 
             <div className="hidden items-center gap-3 md:flex">
-              <Link href={ROUTES.login} className="text-[13px] font-medium text-white/40 transition-colors duration-200 hover:text-white">
-                Sign in
-              </Link>
+              <ThemeToggle variant="inverted" />
+
               <Link
-                href={ROUTES.query}
+                href={ROUTES.login}
                 className="group relative overflow-hidden rounded-xl bg-accent px-5 py-2.5 text-[13px] font-semibold text-white transition-[background-color] duration-200 hover:bg-accentHover"
               >
-                <span className="relative z-10">Open product</span>
+                <span className="relative z-10 inline-flex items-center gap-2">
+                  <GoogleIcon className="h-4 w-4 rounded-full bg-white p-[1px]" />
+                  Sign in
+                </span>
                 <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-[100%]" />
               </Link>
+              <a
+                href="mailto:verumlavineandco@gmail.com"
+                className="rounded-xl border border-white/12 bg-white/[0.03] px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.16em] text-white/75 transition-[background-color,color] duration-200 hover:bg-white/[0.08] hover:text-white"
+              >
+                Contact
+              </a>
             </div>
 
             <button
@@ -131,13 +141,19 @@ export function MarketingHeader() {
 
           <div className="mt-auto space-y-8">
             <div className="h-px w-full bg-white/[0.05]" />
+            <ThemeToggle variant="inverted" className="w-full justify-center py-3" />
             <div className="grid grid-cols-2 gap-4">
-              <Link href={ROUTES.login} onClick={() => setIsOpen(false)} className="flex items-center justify-center rounded-2xl border border-white/[0.08] py-4 text-sm font-medium text-white/60">
+              <Link href={ROUTES.login} onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.08] py-4 text-sm font-medium text-white/70">
+                <GoogleIcon className="h-4 w-4 rounded-full bg-white p-[1px]" />
                 Sign in
               </Link>
-              <Link href={ROUTES.query} onClick={() => setIsOpen(false)} className="flex items-center justify-center rounded-2xl bg-accent py-4 text-sm font-bold text-white">
-                Open Product
-              </Link>
+              <a
+                href="mailto:verumlavineandco@gmail.com"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center rounded-2xl bg-accent py-4 text-sm font-bold text-white"
+              >
+                Contact
+              </a>
             </div>
             <div className="flex flex-col items-center gap-2 text-center">
               <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Verum Lavine & Co.</div>

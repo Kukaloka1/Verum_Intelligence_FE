@@ -4,6 +4,8 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/shared/Input";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { GoogleIcon } from "@/components/shared/GoogleIcon";
 import { getPostAuthRedirect } from "@/lib/auth/redirect";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
@@ -26,17 +28,6 @@ interface AuthEntryPanelProps {
   onGoogleSignIn?: () => void | Promise<void>;
   onLoginSubmit?: (payload: LoginPayload) => void | Promise<void>;
   onSignupSubmit?: (payload: SignupPayload) => void | Promise<void>;
-}
-
-function GoogleMark() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
-      <path
-        fill="#EA4335"
-        d="M12 10.2v3.9h5.4c-.2 1.3-1.6 3.9-5.4 3.9-3.2 0-5.9-2.7-5.9-6s2.7-6 5.9-6c1.8 0 3.1.8 3.8 1.5L18.4 5C16.8 3.5 14.7 2.5 12 2.5A9.5 9.5 0 0 0 2.5 12 9.5 9.5 0 0 0 12 21.5c5.5 0 9.1-3.9 9.1-9.3 0-.6-.1-1.1-.2-1.6H12z"
-      />
-    </svg>
-  );
 }
 
 async function runMaybeAsync(callback?: () => void | Promise<void>) {
@@ -122,7 +113,7 @@ export function AuthEntryPanel({
   };
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surfaceDark px-6 py-14 text-background">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surfaceDark px-6 py-14 text-white">
       
       {/* Subtle dot grid — pure CSS, no blend mode, no blur */}
       <div
@@ -150,12 +141,15 @@ export function AuthEntryPanel({
               V
             </div>
             <div className="flex flex-col">
-              <span className="text-[13px] font-bold tracking-tight text-background">Verum Intelligence</span>
+              <span className="text-[13px] font-bold tracking-tight text-white">Verum Intelligence</span>
               <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent">Lavine & Co.</span>
             </div>
           </Link>
-          <div className="rounded-full border border-white/5 bg-white/[0.03] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">
-            Secure Entry
+          <div className="flex items-center gap-2">
+            <ThemeToggle variant="inverted" />
+            <div className="rounded-full border border-white/5 bg-white/[0.03] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">
+              Secure Entry
+            </div>
           </div>
         </div>
 
@@ -163,10 +157,10 @@ export function AuthEntryPanel({
           <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-accent/80">
             Authentication
           </p>
-          <h1 className="text-3xl font-medium tracking-tighter text-background sm:text-4xl">
+          <h1 className="text-3xl font-medium tracking-tighter text-white sm:text-4xl">
             {isLogin ? "Welcome back" : "Create account"}
           </h1>
-          <p className="text-[13px] font-light leading-relaxed text-white/40">
+          <p className="text-[13px] font-light leading-relaxed text-white/70">
             Access the premier GCC regulatory workspace.
           </p>
         </header>
@@ -176,9 +170,9 @@ export function AuthEntryPanel({
           type="button"
           onClick={handleGoogleSignIn}
           disabled={pendingAction !== null}
-          className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-sm font-medium text-background transition-[background-color,border-color] duration-200 hover:bg-white/[0.06] hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+          className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-sm font-medium text-white transition-[background-color,border-color] duration-200 hover:border-white/20 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <GoogleMark />
+          <GoogleIcon className="h-5 w-5 rounded-full bg-white p-[1px]" />
           <span className="relative z-10">
             {pendingAction === "google" ? "Connecting..." : "Continue with Google"}
           </span>

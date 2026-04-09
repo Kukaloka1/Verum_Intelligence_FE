@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
+import { GoogleIcon } from "@/components/shared/GoogleIcon";
 
 export function LandingCTABanner() {
   return (
@@ -35,17 +36,17 @@ export function LandingCTABanner() {
             <div className="h-px w-6 bg-accent/40" />
           </div>
 
-          <h2 className="mb-8 max-w-3xl text-balance text-4xl font-medium leading-[1.05] tracking-tighter text-background md:text-6xl lg:text-7xl">
+          <h2 className="mb-8 max-w-3xl text-balance text-4xl font-medium leading-[1.05] tracking-tighter text-white md:text-6xl lg:text-7xl">
             Explore the product <br className="hidden md:block" />
-            <span className="text-white/40">direction now.</span>
+            <span className="text-white/55">direction now.</span>
           </h2>
 
-          <p className="mb-14 max-w-xl text-balance text-base font-light leading-relaxed text-background/60 md:text-lg">
+          <p className="mb-14 max-w-xl text-balance text-base font-light leading-relaxed text-white/70 md:text-lg">
             Move through the core product surfaces —{" "}
-            <span className="text-background/80">AI Query</span>,{" "}
-            <span className="text-background/80">Compliance Dashboard</span>,{" "}
-            <span className="text-background/80">Framework Comparison</span>, and{" "}
-            <span className="text-background/80">Market Entry Toolkit</span>.
+            <span className="text-white/90">AI Query</span>,{" "}
+            <span className="text-white/90">Compliance Dashboard</span>,{" "}
+            <span className="text-white/90">Framework Comparison</span>, and{" "}
+            <span className="text-white/90">Market Entry Toolkit</span>.
           </p>
 
           <div className="flex flex-col items-center gap-8">
@@ -55,12 +56,20 @@ export function LandingCTABanner() {
             >
               <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-[100%]" />
               <span className="relative z-10 flex items-center gap-4">
-                Sign In to Verum Intelligence
+                <GoogleIcon className="h-4 w-4 rounded-full bg-white p-[1px]" />
+                Sign in with Google
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-200 group-hover:translate-x-1">
                   <path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
             </Link>
+
+            <a
+              href="mailto:verumlavineandco@gmail.com"
+              className="inline-flex items-center justify-center rounded-2xl border border-white/18 bg-white/[0.03] px-8 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/85 transition-[background-color,color,border-color] duration-200 hover:border-white/28 hover:bg-white/[0.08] hover:text-white"
+            >
+              Contact Team
+            </a>
 
             <div className="flex items-center gap-4 rounded-full border border-white/5 bg-black/20 px-4 py-2">
               <div className="flex items-center gap-2">

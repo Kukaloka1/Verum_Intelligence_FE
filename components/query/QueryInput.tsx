@@ -4,6 +4,7 @@ import { QueryActions } from "./QueryActions";
 
 interface QueryInputProps {
   query: string;
+  queryPlaceholder: string;
   jurisdiction: string | null;
   saveQuery: boolean;
   canSaveQuery: boolean;
@@ -19,6 +20,7 @@ interface QueryInputProps {
 
 export function QueryInput({
   query,
+  queryPlaceholder,
   jurisdiction,
   saveQuery,
   canSaveQuery,
@@ -33,79 +35,91 @@ export function QueryInput({
 }: QueryInputProps) {
   return (
     <form
-      className="space-y-4 md:space-y-5"
+      className="flex flex-col gap-8 p-5 md:gap-10 md:p-6"
       onSubmit={(event) => {
         event.preventDefault();
         void onSubmit();
       }}
     >
-      <div>
+      <div className="flex flex-col gap-1.5">
         <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted">
           Query Input
         </h2>
-        <p className="mt-1 text-sm text-foreground/80">
+        <p className="max-w-[62ch] text-sm leading-relaxed text-foreground/80">
           Submit a source-backed legal or regulatory question. The backend answer is constrained to
           grounded corpus evidence.
         </p>
       </div>
 
-      <JurisdictionSelector
-        value={jurisdiction}
-        disabled={isLoading}
-        onChange={onJurisdictionChange}
-      />
+      <div className="border-t border-border/50 pt-3">
+        <JurisdictionSelector
+          value={jurisdiction}
+          disabled={isLoading}
+          onChange={onJurisdictionChange}
+        />
+      </div>
 
-      <div className="space-y-2">
-        <label htmlFor="query-input" className="text-sm font-medium text-foreground/90">
-          Regulatory Question
-        </label>
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <label htmlFor="query-input" className="text-sm font-medium text-foreground/90">
+            Regulatory Question
+          </label>
+          <span className="text-xs tabular-nums text-muted">{query.length}/4000</span>
+        </div>
+
         <Textarea
           id="query-input"
-          rows={8}
+          rows={9}
           value={query}
           disabled={isLoading}
           maxLength={4000}
-          placeholder="What are the licensing implications for a fintech firm in DIFC?"
-          className="!border-border !bg-background !text-foreground placeholder:!text-muted/70"
+          placeholder={queryPlaceholder}
+          className="!min-h-[250px] !border-border/80 !bg-background !px-5 !py-4 !text-[15px] !leading-8 !text-foreground placeholder:!text-muted/70 resize-none shadow-none"
           onChange={(event) => onQueryChange(event.target.value)}
         />
+
         <div className="flex items-center justify-between text-xs text-muted">
           <span>Max 4000 chars.</span>
           <span>{query.length}/4000</span>
         </div>
       </div>
 
-      {validationDetails.length > 0 ? (
-        <div className="rounded-2xl border border-accent/35 bg-accent/10 p-3 text-sm text-foreground">
-          <div className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
-            Validation details
+      <div className="flex flex-col gap-4">
+        {validationDetails.length > 0 ? (
+          <div className="border-l-2 border-accent/40 py-1 pl-4">
+            <div className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+              Validation details
+            </div>
+            <ul className="space-y-1.5">
+              {validationDetails.map((detail) => (
+                <li key={detail} className="flex items-start gap-2 text-sm text-foreground/90">
+                  <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-accent/60" />
+                  <span>{detail}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul className="mt-2 space-y-1">
-            {validationDetails.map((detail) => (
-              <li key={detail} className="list-inside list-disc text-sm text-foreground/90">
-                {detail}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+        ) : null}
 
-      {preSubmitWarning ? (
-        <div className="rounded-2xl border border-amber-500/35 bg-amber-500/10 p-3 text-sm text-foreground">
-          <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-600">
-            Jurisdiction check
+        {preSubmitWarning ? (
+          <div className="border-l-2 border-amber-500/40 bg-amber-500/[0.03] py-1 pl-4">
+            <div className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-amber-600">
+              Jurisdiction check
+            </div>
+            <p className="text-sm leading-relaxed text-foreground/90">{preSubmitWarning}</p>
           </div>
-          <p className="mt-2 text-sm text-foreground/90">{preSubmitWarning}</p>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
 
-      <QueryActions
-        isLoading={isLoading}
-        saveQuery={saveQuery}
-        canSaveQuery={canSaveQuery}
-        onSaveQueryChange={onSaveQueryChange}
-        onReset={onResetForm}
-      />
+      <div className="border-t border-border/50 pt-6">
+        <QueryActions
+          isLoading={isLoading}
+          saveQuery={saveQuery}
+          canSaveQuery={canSaveQuery}
+          onSaveQueryChange={onSaveQueryChange}
+          onReset={onResetForm}
+        />
+      </div>
     </form>
   );
 }

@@ -30,10 +30,10 @@ export function LandingTransitionSection() {
         </div>
 
         {/* Headline */}
-        <h2 className="max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight text-background md:text-6xl">
+        <h2 className="max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight text-white md:text-6xl">
           Regulatory frameworks
           <br />
-          <span className="text-background/50">don't wait for you</span>
+          <span className="text-white">don't wait for you</span>
           <br />
           to catch up.
         </h2>

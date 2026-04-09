@@ -12,14 +12,25 @@ const STATUS_LABELS: Record<QuerySummaryProps["status"], string> = {
 
 export function QuerySummary({ summary, status }: QuerySummaryProps) {
   return (
-    <section className="space-y-3">
-      <div className="flex items-center justify-between gap-2">
-        <div className="text-sm font-semibold uppercase tracking-[0.14em] text-muted">Summary</div>
-        <span className="rounded-full border border-border bg-panel px-2.5 py-1 text-[10px] font-semibold tracking-[0.12em] text-muted">
+    <section className="space-y-4">
+      <div className="flex items-center justify-between gap-4">
+        <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted/80">
+          Executive Summary
+        </div>
+
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted">
+          <span
+            className={`h-1.5 w-1.5 rounded-full ${
+              status === "success" ? "bg-emerald-500" : "bg-amber-500"
+            }`}
+          />
           {STATUS_LABELS[status]}
         </span>
       </div>
-      <p className="max-w-[72ch] text-[15px] leading-7 text-foreground/95">{summary}</p>
+
+      <p className="max-w-[65ch] text-base font-medium leading-8 text-foreground/90 selection:bg-primary/10">
+        {summary}
+      </p>
     </section>
   );
 }

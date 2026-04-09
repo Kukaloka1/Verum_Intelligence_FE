@@ -1,11 +1,13 @@
 "use client";
 
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
+
 export function AppTopbar() {
   return (
     <header className="flex items-center justify-between border-b border-border bg-background px-4 py-3 md:px-6 md:py-4">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-3 md:hidden">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent text-sm font-black text-background">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent text-sm font-black text-white">
             V
           </div>
 
@@ -27,6 +29,8 @@ export function AppTopbar() {
       </div>
 
       <div className="flex items-center gap-3">
+        <ThemeToggle />
+
         <div className="inline-flex items-center gap-2 rounded-full border border-border bg-panel px-3 py-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">

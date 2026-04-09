@@ -73,12 +73,12 @@ export function MarketingFooter() {
                   V
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold tracking-tight text-background">Verum Intelligence</h3>
+                  <h3 className="text-lg font-bold tracking-tight text-white">Verum Intelligence</h3>
                   <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-accent">GCC Legal Intelligence Platform</p>
                 </div>
               </div>
               
-              <p className="max-w-md text-base font-light leading-relaxed text-background">
+              <p className="max-w-md text-base font-light leading-relaxed text-white/85">
                 Premium GCC regulatory intelligence workspace for founders, investors, and legal teams. 
                 Built for clarity in the most complex markets.
               </p>
@@ -88,20 +88,20 @@ export function MarketingFooter() {
                 <a 
                   href="https://www.instagram.com/verumlavineandco/" 
                   target="_blank" 
-                  className="text-background transition-colors hover:text-accent"
+                  className="text-white/80 transition-colors hover:text-accent"
                 >
                   <IconInstagram />
                 </a>
                 <a 
                   href="https://www.linkedin.com/company/verum-lavine-co/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnUEo2sac7KUaFxZWmqV_MQ2CkMVXnMnxWDGaQIx14AN_TnZubYJRmjkEgvVs_aem_cU5Z8e7pfM4gYp9ynx0ZmQ" 
                   target="_blank" 
-                  className="text-background transition-colors hover:text-accent"
+                  className="text-white/80 transition-colors hover:text-accent"
                 >
                   <IconLinkedin />
                 </a>
                 <a 
                   href="mailto:verumlavineandco@gmail.com" 
-                  className="flex items-center gap-2 text-xs font-medium tracking-wide text-background transition-colors hover:text-accent"
+                  className="flex items-center gap-2 text-xs font-medium tracking-wide text-white/80 transition-colors hover:text-accent"
                 >
                   <IconMail />
                   verumlavineandco@gmail.com
@@ -114,7 +114,7 @@ export function MarketingFooter() {
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7">
             {Object.entries(FOOTER_LINKS).map(([group, links]) => (
               <div key={group} className="flex flex-col gap-6">
-                <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-background">
+                <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/85">
                   {group}
                 </div>
                 <ul className="flex flex-col gap-4">
@@ -122,7 +122,7 @@ export function MarketingFooter() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-[13px] font-medium text-background transition-[transform,color] duration-200 hover:translate-x-1 hover:text-accent"
+                        className="text-[13px] font-medium text-white/70 transition-[transform,color] duration-200 hover:translate-x-1 hover:text-accent"
                       >
                         {link.label}
                       </Link>
@@ -141,13 +141,13 @@ export function MarketingFooter() {
             {/* Legal Information Section */}
             <div className="flex flex-col gap-6 text-center lg:text-left">
               <div className="space-y-2">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-background">Ownership & Jurisdiction</p>
-                <p className="max-w-sm text-[12px] font-medium leading-relaxed text-background">
-                  Verum Lavine & Co. operates under <span className="text-background">PT WriteLife Group Inovasi</span>, 
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">Ownership & Jurisdiction</p>
+                <p className="max-w-sm text-[12px] font-medium leading-relaxed text-white/70">
+                  Verum Lavine & Co. operates under <span className="text-white/90">PT WriteLife Group Inovasi</span>, 
                   <br />Jakarta, Indonesia.
                 </p>
               </div>
-              <div className="flex flex-wrap justify-center gap-4 text-[10px] font-bold uppercase tracking-[0.15em] text-background lg:justify-start">
+              <div className="flex flex-wrap justify-center gap-4 text-[10px] font-bold uppercase tracking-[0.15em] text-white/60 lg:justify-start">
                 <span>Private & Confidential</span>
                 <span className="h-3 w-px bg-border/40" />
                 <span>Regulatory Intelligence v2.0</span>
@@ -162,11 +162,11 @@ export function MarketingFooter() {
                 VERUM
               </div>
               <div className="relative z-10 text-right">
-                <div className="text-[10px] font-black uppercase tracking-[0.5em] text-background mb-2">
+                <div className="mb-2 text-[10px] font-black uppercase tracking-[0.5em] text-white/70">
                   Official Signature
                 </div>
-                <div className="text-3xl font-light tracking-[-0.03em] text-background md:text-5xl lg:text-6xl">
-                  VERUM <span className="font-serif italic text-background">Lavine & Co.</span>
+                <div className="text-3xl font-light tracking-[-0.03em] text-white md:text-5xl lg:text-6xl">
+                  VERUM <span className="font-serif italic text-white/95">Lavine & Co.</span>
                 </div>
               </div>
             </div>
