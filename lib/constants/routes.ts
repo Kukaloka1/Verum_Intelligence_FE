@@ -9,5 +9,6 @@ export const ROUTES = {
   login: "/auth/login",
   signup: "/auth/signup",
   callback: "/auth/callback",
-  postAuthHome: "/dashboard"
+  postAuthHome: "/dashboard",
+  about: "/about"
 } as const;

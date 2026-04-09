@@ -44,6 +44,9 @@ const FOOTER_LINKS = {
     { label: "QFC", href: "#jurisdictions" },
     { label: "KSA", href: "#jurisdictions" },
   ],
+  "The Firm": [
+    { label: "About", href: ROUTES.about },
+  ],
   Account: [
     { label: "Sign in", href: ROUTES.login },
     { label: "Create account", href: ROUTES.signup },

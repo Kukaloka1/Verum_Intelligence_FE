@@ -30,10 +30,11 @@ export function MarketingHeader() {
   }, [isOpen]);
 
   const navItems = [
-    { label: "Product", href: "#what-we-do" },
-    { label: "Who it's for", href: "#audience" },
-    { label: "Jurisdictions", href: "#jurisdictions" },
-    { label: "Why Verum", href: "#why-verum" },
+    { label: "Product", href: "/#what-we-do" },
+    { label: "Who it's for", href: "/#audience" },
+    { label: "Jurisdictions", href: "/#jurisdictions" },
+    { label: "Why Verum", href: "/#why-verum" },
+    { label: "The Firm", href: ROUTES.about },
   ];
 
   return (
