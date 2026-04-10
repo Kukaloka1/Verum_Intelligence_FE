@@ -49,10 +49,19 @@ export function QueryResult({
   return (
     <div className="flex h-full w-full flex-col gap-8 px-2.5 py-4 md:gap-12 md:p-8 lg:p-10">
       <header className="flex flex-col gap-4 px-1 py-1 md:rounded-2xl md:border md:border-border md:bg-background/80 md:p-5">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted">
+        <div className="flex items-center gap-3">
+          <div className="h-px w-8 bg-accent" />
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.32em] text-accent">
             Query Result
           </h3>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-muted">
+            <span className="break-words">{`Jurisdiction: ${resolvedJurisdiction}`}</span>
+            {response ? <span className="break-all">{`Query ID: ${response.queryId ?? "n/a"}`}</span> : null}
+          </div>
+
           <span
             className={cn(
               "rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em]",
@@ -65,11 +74,6 @@ export function QueryResult({
           >
             {viewStateLabel(viewState)}
           </span>
-        </div>
-
-        <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-muted">
-          <span className="break-words">{`Jurisdiction: ${resolvedJurisdiction}`}</span>
-          {response ? <span className="break-all">{`Query ID: ${response.queryId ?? "n/a"}`}</span> : null}
         </div>
 
         {statusMessage ? (
@@ -115,12 +119,12 @@ export function QueryResult({
           <section className="flex flex-col gap-8 p-0 md:rounded-2xl md:border md:border-border md:bg-background/85 md:p-6 md:backdrop-blur-sm">
             <QuerySummary summary={response.answer.summary} status={response.resultStatus} />
 
-            <div className="h-px w-full bg-border/60" />
+            <div className="h-px w-full bg-border/40" />
 
             <QueryStructuredBody sections={response.answer.body} />
 
             {response.resultStatus === "partial" || response.answer.limitations ? (
-              <div className="pt-4">
+              <div className="border-t border-border/30 pt-4">
                 <QueryLimitations
                   limitations={
                     response.answer.limitations ??

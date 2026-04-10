@@ -42,17 +42,21 @@ export function QueryInput({
         void onSubmit();
       }}
     >
-      <div className="flex flex-col gap-1.5">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-muted">
-          Query Input
-        </h2>
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <div className="h-px w-8 bg-accent" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-accent">
+            Query Input
+          </span>
+        </div>
+
         <p className="max-w-none text-sm leading-relaxed text-foreground/80">
           Submit a source-backed legal or regulatory question. The backend answer is constrained to
           grounded corpus evidence.
         </p>
       </div>
 
-      <div className="border-t border-border/50 pt-3">
+      <div className="border-t border-border/40 pt-3">
         <JurisdictionSelector
           value={jurisdiction}
           disabled={isLoading}
@@ -85,12 +89,14 @@ export function QueryInput({
         </div>
       </div>
 
-      <QueryPromptSuggestions
-        jurisdiction={jurisdiction}
-        currentQuery={query}
-        disabled={isLoading}
-        onSelectPrompt={onQueryChange}
-      />
+      <div className="border-t border-border/40 pt-5">
+        <QueryPromptSuggestions
+          jurisdiction={jurisdiction}
+          currentQuery={query}
+          disabled={isLoading}
+          onSelectPrompt={onQueryChange}
+        />
+      </div>
 
       <div className="flex flex-col gap-4">
         {validationDetails.length > 0 ? (
@@ -119,7 +125,7 @@ export function QueryInput({
         ) : null}
       </div>
 
-      <div className="border-t border-border/50 pt-6">
+      <div className="border-t border-border/40 pt-6">
         <QueryActions
           isLoading={isLoading}
           saveQuery={saveQuery}

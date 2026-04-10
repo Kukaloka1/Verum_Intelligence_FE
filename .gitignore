@@ -51,6 +51,10 @@ test-results/
 # Storybook
 storybook-static/
 
+# Internal development scripts / artifacts
+scripts/
+docs/reports/
+
 # Development / internal project docs
 AGENT.md
 AGENTS.md
@@ -69,5 +73,4 @@ docs/MILESTONES.md
 docs/PROJECT_SPEC.md
 docs/DASHBOARD_INVENTORY.md
 docs/DB_SUPABASE.md
-
 
