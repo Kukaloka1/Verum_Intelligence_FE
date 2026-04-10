@@ -10,6 +10,9 @@ import {
   type QueryErrorResponse,
   type QueryErrorStatus,
   type QueryResponse,
+  type QuerySynthesisTraceStatus,
+  type QueryTrace,
+  type QueryTraceBranch,
   type QueryResultStatus,
   type QuerySuccessResponse,
   type QuerySuccessStatus
@@ -47,6 +50,14 @@ function asInteger(value: unknown, field: string): number {
 
   if (value < 0) {
     throw new Error(`Invalid '${field}': expected non-negative integer.`);
+  }
+
+  return value;
+}
+
+function asBoolean(value: unknown, field: string): boolean {
+  if (typeof value !== "boolean") {
+    throw new Error(`Invalid '${field}': expected boolean.`);
   }
 
   return value;
@@ -127,6 +138,113 @@ function asOptionalNonNegativeInteger(value: unknown): number | undefined {
   }
 
   return value;
+}
+
+function toSynthesisTraceStatus(status: QuerySuccessStatus): QuerySynthesisTraceStatus {
+  if (status === "no_results") {
+    return "not_produced";
+  }
+
+  if (status === "partial") {
+    return "partial";
+  }
+
+  if (status === "success") {
+    return "complete";
+  }
+
+  return "unknown";
+}
+
+function parseTraceBranch(value: unknown): QueryTraceBranch {
+  if (!isRecord(value)) {
+    return {
+      matches: null,
+      deferred: null,
+      deferredReason: null,
+      deferredReasonCode: null
+    };
+  }
+
+  const matches = asOptionalNonNegativeInteger(value.matches);
+  const deferred = typeof value.deferred === "boolean" ? value.deferred : null;
+
+  return {
+    matches: matches ?? null,
+    deferred,
+    deferredReason: asOptionalNullableString(value.deferredReason) ?? null,
+    deferredReasonCode: asOptionalNullableString(value.deferredReasonCode) ?? null
+  };
+}
+
+function parseTrace(
+  value: unknown,
+  fallback: { resultStatus: QuerySuccessStatus; jurisdiction: string | null; sourcesUsed: number }
+): QueryTrace {
+  if (!isRecord(value)) {
+    return {
+      vectorRetrieval: {
+        matches: null,
+        deferred: null,
+        deferredReason: null,
+        deferredReasonCode: null
+      },
+      keywordRetrieval: {
+        matches: null,
+        deferred: null,
+        deferredReason: null,
+        deferredReasonCode: null
+      },
+      embeddingLayer: {
+        status: "unknown",
+        model: null,
+        dimension: null,
+        deferredReasonCode: null
+      },
+      groundedSources: fallback.sourcesUsed,
+      synthesis: { status: toSynthesisTraceStatus(fallback.resultStatus) },
+      scope: { jurisdiction: fallback.jurisdiction }
+    };
+  }
+
+  const synthesisStatusRaw = asOptionalString(value.synthesis && isRecord(value.synthesis) ? value.synthesis.status : undefined);
+  const synthesisStatus: QuerySynthesisTraceStatus =
+    synthesisStatusRaw === "complete" ||
+    synthesisStatusRaw === "partial" ||
+    synthesisStatusRaw === "not_produced"
+      ? synthesisStatusRaw
+      : "unknown";
+
+  const scopeJurisdiction =
+    isRecord(value.scope) && (typeof value.scope.jurisdiction === "string" || value.scope.jurisdiction === null)
+      ? (value.scope.jurisdiction as string | null)
+      : fallback.jurisdiction;
+
+  const groundedSources = asOptionalNonNegativeInteger(value.groundedSources) ?? fallback.sourcesUsed;
+  const embeddingLayerRaw = isRecord(value.embeddingLayer) ? value.embeddingLayer : null;
+  const embeddingStatusRaw = asOptionalString(embeddingLayerRaw?.status);
+  const embeddingStatus =
+    embeddingStatusRaw === "ready" ||
+    embeddingStatusRaw === "deferred" ||
+    embeddingStatusRaw === "mismatch" ||
+    embeddingStatusRaw === "not_reported"
+      ? embeddingStatusRaw
+      : "unknown";
+  const embeddingDimension = asOptionalNonNegativeInteger(embeddingLayerRaw?.dimension);
+
+  return {
+    vectorRetrieval: parseTraceBranch(value.vectorRetrieval),
+    keywordRetrieval: parseTraceBranch(value.keywordRetrieval),
+    embeddingLayer: {
+      status: embeddingStatus,
+      model: asOptionalNullableString(embeddingLayerRaw?.model) ?? null,
+      dimension: embeddingDimension ?? null,
+      deferredReasonCode: asOptionalNullableString(embeddingLayerRaw?.deferredReasonCode) ?? null
+    },
+    groundedSources,
+    synthesis: { status: synthesisStatus },
+    scope: { jurisdiction: scopeJurisdiction }
+  };
 }
 
 function coerceAnswerForPartialFallback(value: unknown): QueryAnswer {
@@ -265,13 +383,21 @@ function parseResultStatus(value: unknown): QueryResultStatus {
 }
 
 function parseSuccessResponse(root: Record<string, unknown>, status: QuerySuccessStatus): QuerySuccessResponse {
+  const jurisdiction = asNullableString(root.jurisdiction, "jurisdiction");
+  const sourcesUsed = asInteger(root.sourcesUsed, "sourcesUsed");
+
   return {
     resultStatus: status,
     queryId: asNonEmptyString(root.queryId, "queryId"),
-    jurisdiction: asNullableString(root.jurisdiction, "jurisdiction"),
+    jurisdiction,
     answer: parseAnswer(root.answer),
     citations: parseCitations(root.citations),
-    sourcesUsed: asInteger(root.sourcesUsed, "sourcesUsed")
+    sourcesUsed,
+    trace: parseTrace(root.trace, {
+      resultStatus: status,
+      jurisdiction,
+      sourcesUsed
+    })
   };
 }
 
@@ -332,6 +458,11 @@ export function coercePartialSuccessResponse(value: unknown): QuerySuccessRespon
     jurisdiction: asOptionalNullableString(value.jurisdiction) ?? null,
     answer: coerceAnswerForPartialFallback(value.answer),
     citations,
-    sourcesUsed: parsedSourcesUsed ?? citations.length
+    sourcesUsed: parsedSourcesUsed ?? citations.length,
+    trace: parseTrace(value.trace, {
+      resultStatus: "partial",
+      jurisdiction: asOptionalNullableString(value.jurisdiction) ?? null,
+      sourcesUsed: parsedSourcesUsed ?? citations.length
+    })
   };
 }

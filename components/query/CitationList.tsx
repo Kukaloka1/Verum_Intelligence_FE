@@ -10,7 +10,7 @@ export function CitationList({ citations }: CitationListProps) {
     <section className="flex min-w-0 flex-col gap-1 lg:gap-2">
       <div className="mb-8 space-y-1.5 lg:mb-10">
         <div className="text-sm font-semibold uppercase tracking-[0.14em] text-muted">
-          Citations
+          Source References
         </div>
         <p className="max-w-[45ch] text-xs leading-relaxed text-muted/70 lg:max-w-[56ch]">
           Source-backed references returned by the backend retrieval layer.

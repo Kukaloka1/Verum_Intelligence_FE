@@ -42,6 +42,33 @@ export interface QueryCitation {
   url: string | null;
 }
 
+export type QuerySynthesisTraceStatus = "complete" | "partial" | "not_produced" | "unknown";
+
+export interface QueryTraceBranch {
+  matches: number | null;
+  deferred: boolean | null;
+  deferredReason: string | null;
+  deferredReasonCode: string | null;
+}
+
+export interface QueryTrace {
+  vectorRetrieval: QueryTraceBranch;
+  keywordRetrieval: QueryTraceBranch;
+  embeddingLayer: {
+    status: "ready" | "deferred" | "mismatch" | "not_reported" | "unknown";
+    model: string | null;
+    dimension: number | null;
+    deferredReasonCode: string | null;
+  };
+  groundedSources: number | null;
+  synthesis: {
+    status: QuerySynthesisTraceStatus;
+  };
+  scope: {
+    jurisdiction: string | null;
+  };
+}
+
 export interface QueryErrorInfo {
   code: QueryErrorCode;
   message: string;
@@ -55,6 +82,7 @@ export interface QuerySuccessResponse {
   answer: QueryAnswer;
   citations: QueryCitation[];
   sourcesUsed: number;
+  trace: QueryTrace;
 }
 
 export interface QueryErrorResponse {
@@ -82,4 +110,3 @@ export interface QueryHistoryEntry {
   resultStatus: QueryResultStatus;
   createdAt: string;
 }
-
