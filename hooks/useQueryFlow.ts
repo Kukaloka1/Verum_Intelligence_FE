@@ -20,7 +20,7 @@ import type {
 const DEFAULT_JURISDICTION = "DIFC";
 const DEFAULT_QUERY = QUERY_PLACEHOLDERS_BY_JURISDICTION[DEFAULT_JURISDICTION];
 const MAX_HISTORY_ENTRIES = 40;
-const DEFAULT_REQUEST_TIMEOUT_MS = 22000;
+const DEFAULT_REQUEST_TIMEOUT_MS = 45000;
 const DEBUG_QUERY_FLOW = process.env.NODE_ENV !== "production";
 
 function isPresetQueryValue(value: string): boolean {
